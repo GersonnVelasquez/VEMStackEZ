@@ -22,6 +22,17 @@ export class StackService {
     ).toPromise();
   }
 
+  getYardLayouts(RecordId: number) {
+    return this.http.doGet(environment.svrBackEnd + 'api/YardLayouts?id=' + RecordId).pipe(
+      map(item => {
+        let res: YardLayout = item
+        return res;
+      })
+    )
+  }
+
+
+
   getUnits(row: string, yardId: number) {
     return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/GetInventory?row=${row}&YardId=${yardId}`).pipe(
       map(item => {

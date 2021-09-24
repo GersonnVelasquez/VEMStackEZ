@@ -15,7 +15,6 @@ export class Yard {
     units: Units;
     getUnitFn: Function;
     selectedUnit = new BehaviorSubject<unit | null>(null);
-    selectedWorkInstruction = new BehaviorSubject<string | null>(null);
 
     constructor(yardLayout: YardLayout, getUnitFn: Function) {
         this.start(yardLayout, getUnitFn);
@@ -71,19 +70,12 @@ export class Yard {
         newUnit.RowRecordId = this.rowRecordId;
         newUnit.Depth = unit.depth;
         newUnit.Height = unit.height - 1;
-
         return newUnit;
     }
 
 
     selectUnit(unit: unit) {
-        if (unit.unit) {
-            if (unit.type === "Unit") {
-                this.selectedUnit.next(unit);
-            } else {
-                this.selectedWorkInstruction.next(unit.unit.UnitNumber);
-            }
-        }
+        this.selectedUnit.next(unit);
     }
 
 

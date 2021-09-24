@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="table-area" [style.height]="unitSelected || isInstructionSelected ? '75%' : '90%'">
+    <div class="table-area" [style.height]="state?.unitSelected || isInstructionSelected ? '75%' : '90%'">
         <table>
             <tbody [id]="'table-'+instancia">
 
@@ -51,7 +51,7 @@
     </div>
     <div *ngIf="unitSelected || isInstructionSelected" style="height:13%; background: white; width: 100%;">
         <div *ngIf="unitSelected" class="unitCard">
-            <button (click)="resetSelectedUnitGlobal()" class="close" mat-icon-button><i
+            <button (click)="cancelOperation()" class="close" mat-icon-button><i
                     class="fas fa-times-circle"></i></button>
             <button (click)="lostUnit()" class="lost" mat-icon-button>
                 <i class="fas fa-question-circle"></i></button>

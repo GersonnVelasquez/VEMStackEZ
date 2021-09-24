@@ -10,6 +10,11 @@ import { Instruction } from 'src/app/feature/home/shared/models/instruction.mode
 import { MatDialog } from '@angular/material/dialog';
 import { ChoosePositionDialogComponent } from '../choose-position-dialog/choose-position-dialog.component';
 import { LostUnitDialogComponent } from '../lost-unit-dialog/lost-unit-dialog.component';
+import { State } from '../../shared/patron/state.abstract';
+import { NormalState } from '../../shared/patron/normalMode.state';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.reducers';
+import { cargarLayout, selccionarUnit } from 'src/app/store/actions';
 
 @Component({
   selector: 'app-stack',
@@ -20,18 +25,35 @@ export class StackComponent implements OnInit {
   letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
   yardLayout: YardLayout;
   inventory: any[];
-  unitSelected: unit | null = null;
   instructionSelected: Instruction | null = null;
+  unitSelected: unit | null;
   yard: Yard;
   watingForSelectLocation = false;
   creatingWorkInstruction = false;
+  state: State;
+
   @Input() instancia: string;
 
-  constructor(private stackServices: StackService, private auth: AuthStateService, private yardStorageService: YardStorageService, public dialog: MatDialog) {
+  constructor(private store: Store<AppState>, private stackServices: StackService, private auth: AuthStateService, private yardStorageService: YardStorageService, public dialog: MatDialog) {
 
   }
 
+
+  public transitionTo(state: State): void {
+    console.log(`Context: Transition to ${(<any>state).constructor.name}.`);
+    this.state = state;
+    this.state.setContext(this, (<any>state).constructor.name);
+  }
+
   ngOnInit(): void {
+
+    this.store.select('stack').subscribe(({ unitSelected }) => {
+      console.log(unitSelected)
+this.unitSelected = unitSelected;
+    })
+
+
+
     this.yardStorageService.isntructionMode$.subscribe(mode => {
       this.creatingWorkInstruction = mode.data;
       if (mode.data) {
@@ -51,15 +73,15 @@ export class StackComponent implements OnInit {
       this.watingForSelectLocation = data.data;
     });
 
-    this.yardStorageService.updateData$.subscribe(update => {
-      if (update.data === 'Reset') {
-        this.resetSelectedUnit();
-        this.getUnitsAndSetInventory();
-      } else if (update.data === 'Update') {
+    // this.yardStorageService.updateData$.subscribe(update => {
+    //   if (update.data === 'Reset') {
+    //     this.resetSelectedUnit();
+    //     this.getUnitsAndSetInventory();
+    //   } else if (update.data === 'Update') {
 
-        this.getUnitsAndSetInventory();
-      }
-    });
+    //     this.getUnitsAndSetInventory();
+    //   }
+    // });
 
     this.yardStorageService.resetUnitSelected$.subscribe(data => {
       if (data.origen !== this.instancia) {
@@ -89,7 +111,7 @@ export class StackComponent implements OnInit {
 
   isUnitSelected(unit: unit) {
     if (unit.type === 'Unit') {
-      if (unit?.unit?.RecordId === this.unitSelected?.unit?.RecordId) {
+      if (unit?.unit?.RecordId === this.state.unitSelected?.unit?.RecordId) {
         return true;
       }
     }
@@ -98,25 +120,36 @@ export class StackComponent implements OnInit {
   }
 
   async getYardLayout() {
+    this.store.dispatch(cargarLayout({ recordId: 3 }))
     this.auth.userInfo$.subscribe(async (data) => {
       if (data) {
-        this.yardLayout = await this.stackServices.getYardLayout(3); //cambiar id quemado
-        this.yard = new Yard(this.yardLayout, this.getUnits);
-        this.yard.setInventory();
 
-        this.yard.layout.subscribe(data => {
-          this.inventory = data;
-        });
-        this.yard.selectedUnit.subscribe(unit => {
-          this.unitSelected = unit;
-          this.yardStorageService.unitSelected$.next({ origen: this.instancia, data: unit });
-          // this.scrollIntoViewElementSelected(unit?.unit?.RecordId);
-        });
-        this.yard.selectedWorkInstruction.subscribe(instruction => {
-          if (instruction) {
-            this.yardStorageService.workInstructionSelected$.next({ origen: this.instancia, data: instruction, destino: 'instruction1' });
+
+        this.store.select('stack').subscribe(({ YardLayout }) => {
+          if (YardLayout) {
+            this.yardLayout = YardLayout;
+
+
+            this.yard = new Yard(this.yardLayout, this.getUnits);
+            this.yard.setInventory();
+            this.transitionTo(new NormalState());
+            this.yard.layout.subscribe(data => {
+              this.inventory = data;
+            });
+            this.yard.selectedUnit.subscribe(unit => {
+              if(unit){
+                this.store.dispatch(selccionarUnit(unit))
+              }
+            
+              // this.state.unitSelected = unit;
+              // console.log(this.state.unitSelected)
+              // this.yardStorageService.unitSelected$.next({ origen: this.instancia, data: unit });
+              // this.scrollIntoViewElementSelected(unit?.unit?.RecordId);
+            });
           }
-        })
+        });
+
+
       }
 
     });
@@ -137,26 +170,27 @@ export class StackComponent implements OnInit {
 
 
   async selectUnit(unit: unit) {
-    if (unit) {
-      if (!this.watingForSelectLocation) {
-        await this.selectUnitIfNoWatingForSelectLocation(unit);
-      } else {
-        this.selectUnitIfWatingForSelectLocation(unit);
-      }
-    }
+    this.state.selectUnit(unit);
+    // if (unit) {
+    //   if (!this.watingForSelectLocation) {
+    //     await this.selectUnitIfNoWatingForSelectLocation(unit); 
+    //   } else {
+    //     this.selectUnitIfWatingForSelectLocation(unit); //falta este estado
+    //   }
+    // }
 
   }
 
   async selectUnitIfNoWatingForSelectLocation(unit: unit) {
-    if (!this.yard.thereIsUnitSelected) {
-      this.yard.selectUnit(unit);
-    } else {
-      if (unit?.type === 'Null') {
-        await this.updateUnitLocation(unit)
-        this.getUnitsAndSetInventory();
-        this.updateDataAndReset();
-      }
-    }
+    // if (!this.yard.thereIsUnitSelected) {
+    //   this.yard.selectUnit(unit);
+    // } else {
+    //   if (unit?.type === 'Null') {
+    //     await this.updateUnitLocation(unit)
+    //     this.getUnitsAndSetInventory();
+    //     this.updateDataAndReset();
+    //   }
+    // }
   }
 
 
@@ -168,6 +202,7 @@ export class StackComponent implements OnInit {
   updateData() {
     this.yardStorageService.updateData$.next({ origen: this.instancia, data: 'Update' });
   }
+
   getUnitsAndSetInventory() {
     this.yard.getUnitsAndSetInventory();
   }
@@ -181,14 +216,20 @@ export class StackComponent implements OnInit {
 
 
 
-  async updateUnitLocation(unit: unit) {
-    if (this.creatingWorkInstruction) {
-      await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit))
-    } else {
-      await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit))
-    }
+  // async updateUnitLocation(unit: unit) {
+  //   if (this.creatingWorkInstruction) {
+  //     await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit))
+  //   } else {
+  //     await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit))
+  //   }
 
+  // }
+
+  async updateUnitLocation(unit: unit) {
+    await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit))
   }
+
+
 
   getUnits = async (row: string, yardId: number) => {
     return this.stackServices.getUnits(row, yardId);
@@ -198,32 +239,26 @@ export class StackComponent implements OnInit {
     this.yard.resetSelectedUnit();
   }
 
-  resetSelectedUnitGlobal() {
-    this.yard.resetSelectedUnit();
-    this.yardStorageService.resetUnitSelected$.next({ origen: this.instancia, data: true })
+  cancelOperation() {
+    this.state.cancelOperation();
   }
 
   async nextRow() {
-
     await this.yard.nextRow();
     this.scrollTo();
   }
 
   async prevRow() {
-
     await this.yard.prevRow();
     this.scrollTo();
   }
 
-
   nextStack() {
     this.yard.nextStack();
   }
-
   prevStack() {
     this.yard.prevStack();
   }
-
 
   scrollTo() {
     setTimeout(() => {
@@ -235,7 +270,6 @@ export class StackComponent implements OnInit {
     }, 300);
 
   }
-
 
   openDialog(type: 'ROW' | 'STACK') {
     let info = {
@@ -264,7 +298,7 @@ export class StackComponent implements OnInit {
     const dialogRef = this.dialog.open(LostUnitDialogComponent);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result === 'YES') {
-        await this.stackServices.notifyLostUnit(this.unitSelected?.unit.RecordId, 3) //cambiar yard quemado
+        await this.stackServices.notifyLostUnit(this.state.unitSelected?.unit.RecordId, 3) //cambiar yard quemado
         this.yardStorageService.updateData$.next({ origen: this.instancia, data: 'Reset' });
       }
     });
