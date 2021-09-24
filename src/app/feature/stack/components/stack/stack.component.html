@@ -1,0 +1,70 @@
+<div class="content" [class.creating-instruction-bg]="creatingWorkInstruction">
+    <button (click)="updateData()" class="reload" mat-icon-button><i class="fas fa-sync"></i></button>
+    <div class="header">
+        <div class="contentInfo">
+            <div class="title">
+                <span>ROW</span>
+            </div>
+            <div class="options">
+                <button (click)="prevRow()" mat-icon-button><i class="fas fa-arrow-left"></i></button>
+                <span (click)="openDialog('ROW')">{{yard?.rowNumber}}</span>
+                <button (click)="nextRow()" mat-icon-button><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+        <div class="contentInfo">
+            <div class="title">
+                <span>STACK</span>
+            </div>
+            <div class="options">
+                <button (click)="prevStack()" mat-icon-button><i class="fas fa-arrow-left"></i></button>
+                <span (click)="openDialog('STACK')">{{yard?.stackNumber}}</span>
+                <button (click)="nextStack()" mat-icon-button><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-area" [style.height]="unitSelected || isInstructionSelected ? '75%' : '90%'">
+        <table>
+            <tbody [id]="'table-'+instancia">
+
+                <tr *ngFor="let inv of inventory; let i = index">
+                    <div class="numeros">
+                        {{(inventory.length-1) -i +1 }}
+                    </div>
+                    <td id="{{unit?.unit?.RecordId}}" (click)="selectUnit(unit)"
+                        [class.bg-instruction]="unit?.type === 'Instruction'"
+                        [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
+                        matRipple *ngFor="let unit of inventory[i]">
+
+                        <span
+                            *ngIf="unit?.type === 'Instruction'">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                        <span
+                            *ngIf="unit?.type === 'Unit'">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                    </td>
+                </tr>
+                <tr *ngIf="inventory">
+                    <th></th>
+                    <th *ngFor="let letra of letras.slice(0,inventory[0]?.length)">{{letra}}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="unitSelected || isInstructionSelected" style="height:13%; background: white; width: 100%;">
+        <div *ngIf="unitSelected" class="unitCard">
+            <button (click)="resetSelectedUnitGlobal()" class="close" mat-icon-button><i
+                    class="fas fa-times-circle"></i></button>
+            <button (click)="lostUnit()" class="lost" mat-icon-button>
+                <i class="fas fa-question-circle"></i></button>
+                    
+            <span>{{unitSelected?.unit?.UnitNumber}} {{unitSelected?.unit?.Customer?.Name}}
+                {{unitSelected?.unit?.UnitISO}} {{unitSelected?.unit?.UnitStatus?.Description}}
+                {{unitSelected?.unit?.UnitGrade}}</span>
+        </div>
+        <div *ngIf="isInstructionSelected" class="instructionCard">
+            <button (click)="cancelInstructionWaiting()" class="close" mat-icon-button><i
+                    class="fas fa-times-circle"></i></button>
+            <span>{{instructionSelected?.UnitNumber}} {{instructionSelected?.From}} {{instructionSelected?.To}}
+                {{instructionSelected?.movementType}}</span>
+        </div>
+    </div>
+</div>

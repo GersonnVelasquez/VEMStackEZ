@@ -1,0 +1,15 @@
+<ion-header class="ion-no-border">
+    <nav>
+        <button *ngIf="showBackButton" mat-icon-button><i class="fas fa-arrow-left"></i></button>
+        <span class="title">{{title}}</span>
+        <button *ngIf="showUserButton" mat-icon-button [matMenuTriggerFor]="menu">
+            <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button (click)="signOut()" mat-menu-item>
+                <mat-icon fontSet="fas" fontIcon="icon fa-sign-out-alt"></mat-icon>
+                <span>Sign Out</span>
+            </button>
+        </mat-menu>
+    </nav>
+</ion-header>

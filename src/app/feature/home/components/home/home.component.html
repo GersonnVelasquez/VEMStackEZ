@@ -1,0 +1,57 @@
+<ion-content>
+    <div class="content">
+        <div class="options-area">
+            <ion-segment [value]="currentOption">
+                <ion-segment-button (click)="segmentChanged(Options.INSTRUCTION)"
+                    [disabled]="watingForSelectLocation || isntructionMode" value="1">
+                    <ion-label>Instructions</ion-label>
+                </ion-segment-button>
+                <ion-segment-button (click)="segmentChanged(Options.INVENTORY)" value="2">
+                    <ion-label>Inventory</ion-label>
+                </ion-segment-button>
+                <ion-segment-button (click)="segmentChanged(Options.SPLIP);resetSplit()"
+                    [disabled]="watingForSelectLocation || isntructionMode" value="3">
+                    <ion-label>SPLIT</ion-label>
+                </ion-segment-button>
+            </ion-segment>
+        </div>
+        <div class="panel">
+            <div class="stack" [class.hide]="!showInventory">
+                <app-stack [instancia]="'stack1'"></app-stack>
+            </div>
+            <div class="instructions" [class.hide]="!showInstructions">
+                <app-intructions [instancia]="'instruction1'">
+                </app-intructions>
+            </div>
+            <div class="split" [class.hide]="!showSplit">
+                <div class="panel">
+                    <div class="area">
+                        <div *ngIf="!options.panel1Ok" class="options">
+                            <button (click)="options.showInstruction1 = true; options.panel1Ok = true"
+                                mat-flat-button>Show Instructions</button>
+                            <button (click)="options.showStack1 = true; options.panel1Ok = true" mat-flat-button>Show
+                                Stack</button>
+                        </div>
+
+                        <app-stack *ngIf="options.showStack1" [instancia]="'2'"></app-stack>
+                        <app-intructions [instancia]="'instruction2'" *ngIf="options.showInstruction1">
+                        </app-intructions>
+                    </div>
+                    <div class="area">
+                        <div *ngIf="!options.panel2Ok" class="options">
+                            <button (click)="options.showInstruction2 = true; options.panel2Ok = true"
+                                mat-flat-button>Show Instructions</button>
+                            <button (click)="options.showStack2 = true; options.panel2Ok = true" mat-flat-button>Show
+                                Stack</button>
+                        </div>
+
+                        <app-stack *ngIf="options.showStack2" [instancia]="'3'"></app-stack>
+                        <app-intructions [instancia]="'instruction3'" *ngIf="options.showInstruction2">
+                        </app-intructions>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ion-content>

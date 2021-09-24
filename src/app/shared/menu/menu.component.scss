@@ -1,0 +1,32 @@
+.menu{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .header{
+        background-color: black;
+        color: white;
+        padding: 1rem;
+        font-size: 1rem;
+    }
+}
+
+.sing-out{
+    padding: 10px;
+    display: flex;
+    .mat-flat-button{
+        width: 100%;
+        background-color: gray;
+        color: white;
+        .icon{
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+    }
+}
+
+.mat-list{
+    margin: 0;
+    padding: 0;
+}

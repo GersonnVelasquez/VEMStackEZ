@@ -1,0 +1,34 @@
+.content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    .logo-area {
+        flex: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        i{
+            font-size: 10rem;
+        }
+    }
+    .form-area {
+        flex: 50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        form{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 20rem;
+            .mat-flat-button{
+                background-color: gray;
+                color: white;
+                margin-top: 1rem;
+                font-size: 1rem;
+                padding: 0.3rem;
+            }
+        }
+    }
+}

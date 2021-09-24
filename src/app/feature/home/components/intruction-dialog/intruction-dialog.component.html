@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Instruction </h1>
+<div class="content" mat-dialog-content>
+    <span><strong>No: </strong>{{instructionNumber}}</span>
+    <span><strong>Unit Number: </strong>{{instruction?.UnitNumber}}</span>
+    <span><strong>From: </strong>{{instruction?.From}}</span>
+    <span><strong>To: </strong>{{instruction?.To}}</span>
+    <span><strong>Movement Type: </strong>{{instruction?.movementType}}</span>
+
+    <div class="button-area">
+        <button [disabled]="instruction?.cantCompleteTospecifiedYardLocation" mat-button (click)="close('Complete')">I completed the move to the specified Yard Location</button>
+        <button mat-button (click)="close('Move')">I Completed the move to a different Yard Location</button>
+    </div>
+
+</div>

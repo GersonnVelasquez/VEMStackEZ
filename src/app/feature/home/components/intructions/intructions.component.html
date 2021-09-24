@@ -1,0 +1,34 @@
+<div class="searchArea">
+    <mat-form-field style="width: 100%;" appearance="outline">
+        <mat-label>Search</mat-label>
+        <input [(ngModel)]="search" autocomplete="off" matInput placeholder="Placeholder">
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+</div>
+<div class="instruction-panel">
+
+    <table [class.font-big]="instancia === 'instruction1'">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Unit Number</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr (click)="openDialog(instruction, i +1)" matRipple
+                *ngFor="let instruction of instructions | search: search ;let i = index">
+                <td>{{i +1}}</td>
+                <td>{{instruction.UnitNumber}}</td>
+                <td>{{instruction.From}}</td>
+                <td>{{instruction.To}}</td>
+                <td>{{instruction.movementType}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button (click)="getInstructions()" class="reload" mat-icon-button><i class="fas fa-sync"></i></button>
+</div>

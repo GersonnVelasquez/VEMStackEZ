@@ -1,0 +1,22 @@
+.content{
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-button{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.button-area{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    .mat-button{
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

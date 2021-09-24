@@ -1,0 +1,23 @@
+<ion-menu side="start" menuId="menu" contentId="main" *ngIf="isSessionActive">
+    <ion-content>
+        <div class="menu">
+            <div>
+                <div class="header">
+                    <span>Menu</span>
+                </div>
+                <mat-list>
+                    <mat-list-item (click)="enterWorkInstructionMode(); close()" *ngIf="!isInstructionMode" matRipple>Enter
+                        WorkInstruction Mode</mat-list-item>
+                    <mat-list-item (click)="exitWorkInstructionMode(); close()" *ngIf="isInstructionMode" matRipple>Exit
+                        WorkInstruction Mode</mat-list-item>
+                </mat-list>
+            </div>
+            <div class="sing-out">
+                <button (click)="signOut();close()" mat-flat-button>
+                    <em class="fas fa-sign-out-alt icon"></em>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </div>
+    </ion-content>
+</ion-menu>
