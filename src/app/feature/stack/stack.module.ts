@@ -9,6 +9,7 @@ import { StoreModule } from '@ngrx/store';
 import { StackReducer } from 'src/app/store/reducers';
 import { EffectsModule } from '@ngrx/effects';
 import { EffectsArray } from 'src/app/store/effects';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,13 +20,13 @@ import { EffectsArray } from 'src/app/store/effects';
   imports: [
     CommonModule,
     MaterialModule,
-    StoreModule.forFeature('stack',StackReducer),
+    SharedModule,
     EffectsModule.forFeature(EffectsArray)
-  ], 
-  providers:[
+  ],
+  providers: [
     StackService
   ],
-  exports:[
+  exports: [
     StackComponent
   ]
 })

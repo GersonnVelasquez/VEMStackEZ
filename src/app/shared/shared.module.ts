@@ -5,6 +5,7 @@ import { IonicToolModule } from '../tools/ionic/ionic.module';
 import { MaterialModule } from '../tools/material/material.module';
 import { MenuComponent } from './menu/menu.component';
 import { SearchPipe } from './pipes/search.pipe';
+import { TrackByPipe } from './pipes/track-by.pipe';
 
 
 
@@ -12,7 +13,8 @@ import { SearchPipe } from './pipes/search.pipe';
   declarations: [
     NavbarComponent,
     MenuComponent,
-    SearchPipe
+    SearchPipe,
+    TrackByPipe
   ],
   imports: [
     CommonModule,
@@ -22,7 +24,8 @@ import { SearchPipe } from './pipes/search.pipe';
   exports:[
     NavbarComponent,
     MenuComponent,
-    SearchPipe
+    SearchPipe,
+    TrackByPipe
   ]
 })
 export class SharedModule { }

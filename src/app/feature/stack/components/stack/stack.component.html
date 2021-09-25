@@ -23,18 +23,18 @@
         </div>
     </div>
 
-    <div class="table-area" [style.height]="state?.unitSelected || isInstructionSelected ? '75%' : '90%'">
+    <div class="table-area" [style.height]="unitSelected || isInstructionSelected ? '75%' : '90%'">
         <table>
             <tbody [id]="'table-'+instancia">
 
-                <tr *ngFor="let inv of inventory; let i = index">
+                <tr *ngFor="let inv of inventory; let i = index; trackBy: 'i' | trackBy">
                     <div class="numeros">
                         {{(inventory.length-1) -i +1 }}
                     </div>
-                    <td id="{{unit?.unit?.RecordId}}" (click)="selectUnit(unit)"
+                    <td id="{{unit?.unit?.RecordId}}" (click)="selectLocation(unit)"
                         [class.bg-instruction]="unit?.type === 'Instruction'"
                         [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
-                        matRipple *ngFor="let unit of inventory[i]">
+                        matRipple *ngFor="let unit of inventory[i] ; let i = index; trackBy: 'i' | trackBy">
 
                         <span
                             *ngIf="unit?.type === 'Instruction'">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>

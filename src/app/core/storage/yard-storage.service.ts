@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { YardLocation } from 'src/app/feature/stack/shared/models/yard.model';
+import { NormalState } from 'src/app/feature/stack/shared/state-class/normalMode.state';
+import { State } from 'src/app/feature/stack/shared/state-class/state.abstract';
 
 @Injectable()
 export class YardStorageService {
@@ -12,6 +15,12 @@ export class YardStorageService {
   watingForSelectLocation$ = new Subject<emiter>();
   cancelWatingForSelectLocation$ = new Subject<emiter>();
   instructionSelected$ = new Subject<emiter>();
+
+
+
+  unitSelected$N = new BehaviorSubject<YardLocation | null>(null);
+  state$N = new BehaviorSubject<State>(new NormalState());
+
   constructor() { }
 }
 

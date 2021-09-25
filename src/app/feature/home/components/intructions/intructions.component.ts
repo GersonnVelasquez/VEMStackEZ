@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, OnDestroy, Input } from '@angu
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { AuthStateService } from 'src/app/core/services/auth-state.service';
-import { unit } from 'src/app/feature/stack/shared/models/yard.model';
+import { YardLocation } from 'src/app/feature/stack/shared/models/yard.model';
 import { Instruction } from '../../shared/models/instruction.model';
 import { InstructionsService } from '../../shared/services/instructions.service';
 import { IntructionDialogComponent } from '../intruction-dialog/intruction-dialog.component';
@@ -119,7 +119,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async completeWorkInstructionToDiferentLocation(unit: unit, type: 'Null' | 'Instruction') {
+  async completeWorkInstructionToDiferentLocation(unit: YardLocation, type: 'Null' | 'Instruction') {
     this.instructionSelected.Depth = unit.depth;
     this.instructionSelected.Height = unit.height - 1;
     this.instructionSelected.RowRecordId = unit.rowId;
@@ -137,7 +137,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
   }
 
 
-  async recalculateWorkInstruction(unit: unit) {
+  async recalculateWorkInstruction(unit: YardLocation) {
     let instruction = this.instructions.filter(i => i.UnitNumber === unit.unit.UnitNumber)[0]
 
     if (instruction.UnitNumber === this.instructionSelected.UnitNumber) {

@@ -4,7 +4,7 @@ import { YardLayout } from "./yard-layout.model";
 
 export class Yard {
 
-    layout = new BehaviorSubject<unit[][]>([]);
+    layout = new BehaviorSubject<YardLocation[][]>([]);
     row: number;
     stack: number;
     height = 5;
@@ -14,7 +14,7 @@ export class Yard {
     stackPosition = 0;
     units: Units;
     getUnitFn: Function;
-    selectedUnit = new BehaviorSubject<unit | null>(null);
+
 
     constructor(yardLayout: YardLayout, getUnitFn: Function) {
         this.start(yardLayout, getUnitFn);
@@ -59,29 +59,22 @@ export class Yard {
         return this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].RecordId;
     }
 
-    get thereIsUnitSelected() {
-        return this.selectedUnit.getValue() ? true : false;
-    }
 
 
-    getUnitWithPositionUdated(unit: unit) {
-        let newUnit = this.selectedUnit.getValue()?.unit;
-        newUnit.StackRecordId = this.stackRecordId;
-        newUnit.RowRecordId = this.rowRecordId;
-        newUnit.Depth = unit.depth;
-        newUnit.Height = unit.height - 1;
-        return newUnit;
-    }
+
+    // getUnitWithPositionUdated(unit: unit) {
+    //     let newUnit = this.selectedUnit.getValue()?.unit;
+    //     newUnit.StackRecordId = this.stackRecordId;
+    //     newUnit.RowRecordId = this.rowRecordId;
+    //     newUnit.Depth = unit.depth;
+    //     newUnit.Height = unit.height - 1;
+
+    //     return newUnit;
+    // }
 
 
-    selectUnit(unit: unit) {
-        this.selectedUnit.next(unit);
-    }
 
 
-    resetSelectedUnit() {
-        this.selectedUnit.next(null);
-    }
 
     async nextRow() {
         this.stackPosition = 0;
@@ -152,14 +145,14 @@ export class Yard {
         this.stack = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].RecordId;
         this.height = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].Height;
         this.depth = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].Depth;
-        let heightArrar: unit[][] = [];
-        let depthArrar: unit[] = [];
+        let heightArrar: YardLocation[][] = [];
+        let depthArrar: YardLocation[] = [];
         for (let h = this.height; h > 0; h--) {
             for (let d = 0; d < this.depth; d++) {
                 let WorkInstruction = this.getWorkInstructions(h - 1, d);
                 let ActiveUnit = this.getActiveUnits(h - 1, d);
                 if (ActiveUnit) {
-                    let unit: unit = {
+                    let unit: YardLocation = {
                         unit: ActiveUnit,
                         type: "Unit",
                         depth: d,
@@ -169,7 +162,7 @@ export class Yard {
                     }
                     depthArrar.push(unit);
                 } else if (WorkInstruction) {
-                    let unit: unit = {
+                    let unit: YardLocation = {
                         unit: WorkInstruction,
                         type: "Instruction",
                         depth: d,
@@ -180,7 +173,7 @@ export class Yard {
                     depthArrar.push(unit);
                 }
                 else {
-                    let unit: unit = {
+                    let unit: YardLocation = {
                         unit: null,
                         type: "Null",
                         depth: d,
@@ -231,7 +224,7 @@ export class Yard {
 }
 
 
-export interface unit {
+export interface YardLocation {
     unit: any;
     type: 'Instruction' | 'Unit' | 'Null';
     depth: number,
