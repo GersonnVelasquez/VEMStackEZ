@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ActiveUnit, Units } from '../../shared/models/units.model';
+import { unit } from '../../shared/models/yard.model';
 import { StackService } from '../../shared/services/stack.service';
 
 @Component({
@@ -18,14 +19,12 @@ export class SearchDialogComponent implements OnInit {
   }
 
   async getUnitsByUnitNumber() {
-
     this.activeUnits = await this.satckService.getUnitsByUnitNumber(this.unitNumber, 3);
     this.searched = true;
-    // console.log(this.activeUnits)
   }
 
-  close(unitNumber: string): void {
-    this.dialogRef.close('MNBU3929507');
+  close(unitNumber: ActiveUnit): void {
+    this.dialogRef.close(unitNumber);
   }
 
 }

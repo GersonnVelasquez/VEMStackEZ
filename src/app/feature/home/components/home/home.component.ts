@@ -42,16 +42,20 @@ export class HomeComponent implements OnInit {
   }
 
 
-  resetSplit() {
-    this.options = {
-      showStack1: false,
-      showStack2: false,
-      showInstruction1: false,
-      showInstruction2: false,
-      panel1Ok: false,
-      panel2Ok: false,
-    }
+  resetLeft() {
+    this.options.panel2Ok = false;
+    this.options.showInstruction2 = false;
+    this.options.showStack2 = false;
   }
+
+
+  resetRight() {
+    this.options.panel1Ok = false;
+    this.options.showInstruction1 = false;
+    this.options.showStack1 = false;
+  }
+
+
 
 
   get showInventory() {

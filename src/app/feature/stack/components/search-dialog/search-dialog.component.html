@@ -10,7 +10,6 @@
 
     <p *ngIf="activeUnits.length <= 0 && searched" style="text-align: center;">TEXTO DE NO ENCONTRADO</p>
     <mat-list role="list">
-        <mat-list-item *ngFor="let unit of activeUnits" (click)="close(unit.UnitNumber)" matRipple>{{unit.UnitNumber}}</mat-list-item>
-        <mat-list-item (click)="close('')" matRipple>asdasd</mat-list-item>
+        <mat-list-item *ngFor="let unit of activeUnits" (click)="close(unit)" matRipple>{{unit.UnitNumber}}</mat-list-item>
     </mat-list>
 </div>

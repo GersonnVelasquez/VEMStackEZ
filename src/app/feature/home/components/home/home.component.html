@@ -1,7 +1,17 @@
 <ion-content>
     <div class="content">
         <div class="options-area">
-            <ion-segment [value]="currentOption">
+            <div class="options">
+                <button [class.active-option]="currentOption === Options.INSTRUCTION" class="button active-option" (click)="segmentChanged(Options.INSTRUCTION)" mat-flat-button>INSTRUCTIONS</button>
+                <button [class.active-option]="currentOption === Options.INVENTORY" class="button" (click)="segmentChanged(Options.INVENTORY)" mat-flat-button>INVENTORY</button>
+                <div [class.active-option]="currentOption === Options.SPLIP" class="button options">
+                    <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetRight()" mat-flat-button>L</button>
+                    <button class="button" (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIP</button>
+                    <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetLeft()"   mat-flat-button>R</button>
+                </div>
+                
+            </div>
+            <!-- <ion-segment [value]="currentOption">
                 <ion-segment-button (click)="segmentChanged(Options.INSTRUCTION)"
                     [disabled]="watingForSelectLocation || isntructionMode" value="1">
                     <ion-label>Instructions</ion-label>
@@ -10,10 +20,9 @@
                     <ion-label>Inventory</ion-label>
                 </ion-segment-button>
                 <ion-segment-button (click)="segmentChanged(Options.SPLIP);resetSplit()"
-                    [disabled]="watingForSelectLocation || isntructionMode" value="3">
-                    <ion-label>SPLIT</ion-label>
+                    [disabled]="watingForSelectLocation || isntructionMode" value="3">   
                 </ion-segment-button>
-            </ion-segment>
+            </ion-segment> -->
         </div>
         <div class="panel">
             <div class="stack" [class.hide]="!showInventory">

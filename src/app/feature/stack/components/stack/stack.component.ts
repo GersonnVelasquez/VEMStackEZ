@@ -12,6 +12,7 @@ import { ChoosePositionDialogComponent } from '../choose-position-dialog/choose-
 import { LostUnitDialogComponent } from '../lost-unit-dialog/lost-unit-dialog.component';
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import { NewUnitDialogComponent } from '../new-unit-dialog/new-unit-dialog.component';
+import { ActiveUnit, Units } from '../../shared/models/units.model';
 
 @Component({
   selector: 'app-stack',
@@ -114,9 +115,9 @@ export class StackComponent implements OnInit {
   }
 
 
-  scrollIntoViewElementSelected(RecordId: string) {
+  scrollIntoViewElementSelected(RecordId: number) {
     setTimeout(() => {
-      document.getElementById(RecordId)?.scrollIntoView(false);
+      document.getElementById(RecordId.toString())?.scrollIntoView(false);
     }, 300);
   }
 
@@ -136,7 +137,7 @@ export class StackComponent implements OnInit {
       if (this.watingForSelectLocation) {
         this.selectUnitIfWatingForSelectLocation(unit);
       } else {
-        this.openNewUnitDialog()
+        this.openNewUnitDialog(unit)
       }
     }
   }
@@ -278,16 +279,45 @@ export class StackComponent implements OnInit {
 
   openSearchDialog() {
     const dialogRef = this.dialog.open(SearchDialogComponent);
-    dialogRef.afterClosed().subscribe((result: any) => {
-      console.log(result);
+    dialogRef.afterClosed().subscribe(async (result: ActiveUnit) => {
+      if (result) {
+        await this.yard.setManualRowByRecordId(result.RowRecordId);
+        await this.yard.setManualStackByRecordId(result.StackRecordId);
+        let unitSearched: unit = {
+          depth: result.Depth,
+          height: result.Height -1,
+          rowId: result.RowRecordId,
+          stackId: result.StackRecordId,
+          type: 'Unit',
+          unit: result
+        }
+
+        console.log(unitSearched);
+
+        this.yardStorageService.unitSelected$.next(unitSearched);
+        this.scrollIntoViewElementSelected(result.RecordId)
+      }
     });
   }
 
-  openNewUnitDialog() {
+  openNewUnitDialog(unit: unit) {
     if (!this.unitSelected) {
-      this.dialog.open(NewUnitDialogComponent)
+      const dialogRef = this.dialog.open(NewUnitDialogComponent);
+      dialogRef.afterClosed().subscribe(async (result: string) => {
+        if (result) {
+          let newUnit = {
+            RowRecordId: unit.rowId,
+            StackRecordId: unit.stackId,
+            Depth: unit.depth,
+            Height: unit.height - 1,
+            UnitNumber: result,
+            RecordId: 0
+          }
+          await this.stackServices.updateUnitLocation(newUnit);
+          this.updateData();
+        }
+      });
     }
-
   }
 
 }

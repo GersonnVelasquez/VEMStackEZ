@@ -31,7 +31,7 @@ export class StackService {
     ).toPromise();
   }
 
-  updateUnitLocation(unit: ActiveUnit) {
+  updateUnitLocation(unit: ActiveUnit | any) {
     return this.http.doPost(environment.svrBackEnd + 'api/ClerkStackEZ/updateunitlocation', unit).pipe(
       map(item => {
         let res: string = item

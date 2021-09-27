@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StackService } from '../../shared/services/stack.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-new-unit-dialog',
@@ -8,15 +8,15 @@ import { StackService } from '../../shared/services/stack.service';
 })
 export class NewUnitDialogComponent implements OnInit {
   unitNumber: string;
- 
-  constructor(private satckService: StackService) { }
+
+  constructor(public dialogRef: MatDialogRef<NewUnitDialogComponent>) { }
 
   ngOnInit(): void {
   }
 
 
   setNewUnit(): void {
-
+    this.dialogRef.close(this.unitNumber);
   }
 
 }

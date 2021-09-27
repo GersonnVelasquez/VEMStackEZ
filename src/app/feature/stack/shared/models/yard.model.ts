@@ -43,6 +43,18 @@ export class Yard {
         });
     }
 
+    get rowsRecordId() {
+        return this.yardLayout.Rows.map(i => {
+            return i.RecordId;
+        });
+    }
+
+    get stacksRecordIdInRow() {
+        return this.yardLayout.Rows[this.rowPosition].Stacks.map(i => {
+            return i.RecordId
+        });
+    }
+
     get stacksNumbersInRow() {
         return this.yardLayout.Rows[this.rowPosition].Stacks.map(i => {
             return i.Number
@@ -113,6 +125,18 @@ export class Yard {
         this.stackPosition = this.stacksNumbersInRow.indexOf(stackNumber);
         this.setInventory();
     }
+
+    async setManualRowByRecordId(recordId: number) {
+        this.stackPosition = 0;
+        this.rowPosition = this.rowsRecordId.indexOf(recordId);
+        await this.getUnitsAndSetInventory();
+    }
+    async setManualStackByRecordId(recordId: number) {
+        this.stackPosition = this.stacksRecordIdInRow.indexOf(recordId);
+        this.setInventory();
+    }
+
+ 
 
 
     async getUnitsAndSetInventory() {

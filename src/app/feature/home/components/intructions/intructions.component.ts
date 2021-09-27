@@ -150,7 +150,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
       workInstruction: instruction,
       activeUnits: null
     }
-
+console.log(JSON.stringify(instructionToRecalculate) )
     await this.instructionsServerices.recalculateWorkInstruction(instructionToRecalculate);
   }
 
