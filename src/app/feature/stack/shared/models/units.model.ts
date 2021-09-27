@@ -8,19 +8,21 @@ export interface ActiveUnit {
     Customer: any
     CustomerId: number
     DateIn: string
+
     Depth: number
+    Height: number
+    RowRecordId: number
+    StackRecordId: number
+
     EquipmentSizeType: any
     EquipmentSizeTypeId: number
     EquipmentType: any
     EquipmentTypeId: number
-    Height: number
     HexColorCode: string
     Inactive: boolean
     Location: any
     LocationId: number
     RecordId: number
-    RowRecordId: number
-    StackRecordId: number
     UnitGrade: any
     UnitGradeId: number
     UnitISO: string

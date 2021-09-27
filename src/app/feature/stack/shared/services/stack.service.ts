@@ -51,6 +51,15 @@ export class StackService {
     ).toPromise();
   }
 
+  getUnitsByUnitNumber(unitNumber: string, yardId: number) {
+    return this.http.doGet(environment.svrBackEnd + `/api/ClerkStackEZ/GetActiveUnits?yardId=${yardId}&UnitNumber=${unitNumber}`).pipe(
+      map(item => {
+        let res: ActiveUnit[] = item.ActiveUnits
+        return res;
+      })
+    ).toPromise();
+  }
+
 
   createWorkInstruction(unit: ActiveUnit) {
     return this.http.doPost(environment.svrBackEnd + 'api/ClerkStackEZ/CreateworkInstruction', unit).pipe(

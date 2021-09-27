@@ -6,7 +6,6 @@ import { unit } from 'src/app/feature/stack/shared/models/yard.model';
 import { Instruction } from '../../shared/models/instruction.model';
 import { InstructionsService } from '../../shared/services/instructions.service';
 import { IntructionDialogComponent } from '../intruction-dialog/intruction-dialog.component';
-import { take } from 'rxjs/operators';
 import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { UnitAllocationPayload } from '../../shared/models/unit-allocation-payload.model';
 
@@ -35,6 +34,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
     });
 
     this.yardStorageService.workInstructionSelected$.subscribe(unitNumber => {
+      console.log(unitNumber)
       if (unitNumber.destino === this.instancia) {
         let instruction = this.instructions.filter(i => i.UnitNumber === unitNumber.data);
         if (instruction.length > 0) {
@@ -48,7 +48,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
       }
     })
     this.yardStorageService.unitSelected$.subscribe(data => {
-      if (data.data) {
+      if (data) {
         this.isUnitSelected = true;
       } else {
         this.isUnitSelected = false;

@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Unit Search</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="outline">
+        <mat-label>Unit Number</mat-label>
+        <input [(ngModel)]="unitNumber" matInput placeholder="Placeholder">
+        <button (click)="getUnitsByUnitNumber()" type="button" mat-icon-button matSuffix>
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+
+    <p *ngIf="activeUnits.length <= 0 && searched" style="text-align: center;">TEXTO DE NO ENCONTRADO</p>
+    <mat-list role="list">
+        <mat-list-item *ngFor="let unit of activeUnits" (click)="close(unit.UnitNumber)" matRipple>{{unit.UnitNumber}}</mat-list-item>
+        <mat-list-item (click)="close('')" matRipple>asdasd</mat-list-item>
+    </mat-list>
+</div>

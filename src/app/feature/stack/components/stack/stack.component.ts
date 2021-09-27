@@ -10,6 +10,8 @@ import { Instruction } from 'src/app/feature/home/shared/models/instruction.mode
 import { MatDialog } from '@angular/material/dialog';
 import { ChoosePositionDialogComponent } from '../choose-position-dialog/choose-position-dialog.component';
 import { LostUnitDialogComponent } from '../lost-unit-dialog/lost-unit-dialog.component';
+import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
+import { NewUnitDialogComponent } from '../new-unit-dialog/new-unit-dialog.component';
 
 @Component({
   selector: 'app-stack',
@@ -35,7 +37,7 @@ export class StackComponent implements OnInit {
     this.yardStorageService.isntructionMode$.subscribe(mode => {
       this.creatingWorkInstruction = mode.data;
       if (mode.data) {
-        this.yard.resetSelectedUnit()
+        this.resetSelectedUnit()
       }
     });
 
@@ -70,15 +72,7 @@ export class StackComponent implements OnInit {
     });
 
     this.yardStorageService.unitSelected$.subscribe(async (unit) => {
-      if (unit.origen !== this.instancia) {
-        if (unit.data) {
-          if (!this.watingForSelectLocation) {
-            await this.selectUnitIfNoWatingForSelectLocation(unit.data);
-          } else {
-            this.selectUnitIfWatingForSelectLocation(unit.data);
-          }
-        }
-      }
+      this.unitSelected = unit;
     });
     this.getYardLayout();
   }
@@ -97,6 +91,7 @@ export class StackComponent implements OnInit {
     return false;
   }
 
+
   async getYardLayout() {
     this.auth.userInfo$.subscribe(async (data) => {
       if (data) {
@@ -107,16 +102,6 @@ export class StackComponent implements OnInit {
         this.yard.layout.subscribe(data => {
           this.inventory = data;
         });
-        this.yard.selectedUnit.subscribe(unit => {
-          this.unitSelected = unit;
-          this.yardStorageService.unitSelected$.next({ origen: this.instancia, data: unit });
-          // this.scrollIntoViewElementSelected(unit?.unit?.RecordId);
-        });
-        this.yard.selectedWorkInstruction.subscribe(instruction => {
-          if (instruction) {
-            this.yardStorageService.workInstructionSelected$.next({ origen: this.instancia, data: instruction, destino: 'instruction1' });
-          }
-        })
       }
 
     });
@@ -136,20 +121,42 @@ export class StackComponent implements OnInit {
   }
 
 
-  async selectUnit(unit: unit) {
-    if (unit) {
-      if (!this.watingForSelectLocation) {
-        await this.selectUnitIfNoWatingForSelectLocation(unit);
-      } else {
+  selectLocation(unit: unit) {
+    if (unit.type === 'Unit' || unit.type === 'Null') {
+      this.selectUnit(unit);
+    }
+    if (unit.type === 'Instruction') {
+      if (this.watingForSelectLocation) {
         this.selectUnitIfWatingForSelectLocation(unit);
+      } else {
+        this.yardStorageService.workInstructionSelected$.next({ origen: this.instancia, data: unit.unit.UnitNumber, destino: 'instruction1' });
       }
     }
-
+    if (unit.type === 'Null') {
+      if (this.watingForSelectLocation) {
+        this.selectUnitIfWatingForSelectLocation(unit);
+      } else {
+        this.openNewUnitDialog()
+      }
+    }
   }
 
-  async selectUnitIfNoWatingForSelectLocation(unit: unit) {
-    if (!this.yard.thereIsUnitSelected) {
-      this.yard.selectUnit(unit);
+
+
+  // async selectUnit(unit: unit) {
+  //   if (unit) {
+  //     if (!this.watingForSelectLocation) {
+  //       await this.selectUnitIfNoWatingForSelectLocation(unit);
+  //     } else {
+  //       this.selectUnitIfWatingForSelectLocation(unit);
+  //     }
+  //   }
+
+  // }
+
+  async selectUnit(unit: unit) {
+    if (!this.unitSelected && unit.type === 'Unit') {
+      this.yardStorageService.unitSelected$.next(unit)
     } else {
       if (unit?.type === 'Null') {
         await this.updateUnitLocation(unit)
@@ -173,7 +180,7 @@ export class StackComponent implements OnInit {
   }
 
   async selectUnitIfWatingForSelectLocation(unit: unit) {
-    this.yard.resetSelectedUnit();
+    this.resetSelectedUnit();
     if (unit.type === 'Null' || unit.type === 'Instruction') {
       this.yardStorageService.unitSelectedForSelectLocation$.next({ origen: this.instancia, data: unit });
     }
@@ -182,12 +189,13 @@ export class StackComponent implements OnInit {
 
 
   async updateUnitLocation(unit: unit) {
-    if (this.creatingWorkInstruction) {
-      await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit))
-    } else {
-      await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit))
+    if (this.unitSelected) {
+      if (this.creatingWorkInstruction) {
+        await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit, this.unitSelected))
+      } else {
+        await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit, this.unitSelected))
+      }
     }
-
   }
 
   getUnits = async (row: string, yardId: number) => {
@@ -195,13 +203,10 @@ export class StackComponent implements OnInit {
   }
 
   resetSelectedUnit() {
-    this.yard.resetSelectedUnit();
+    this.yardStorageService.unitSelected$.next(null)
   }
 
-  resetSelectedUnitGlobal() {
-    this.yard.resetSelectedUnit();
-    this.yardStorageService.resetUnitSelected$.next({ origen: this.instancia, data: true })
-  }
+
 
   async nextRow() {
 
@@ -268,6 +273,21 @@ export class StackComponent implements OnInit {
         this.yardStorageService.updateData$.next({ origen: this.instancia, data: 'Reset' });
       }
     });
+  }
+
+
+  openSearchDialog() {
+    const dialogRef = this.dialog.open(SearchDialogComponent);
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log(result);
+    });
+  }
+
+  openNewUnitDialog() {
+    if (!this.unitSelected) {
+      this.dialog.open(NewUnitDialogComponent)
+    }
+
   }
 
 }

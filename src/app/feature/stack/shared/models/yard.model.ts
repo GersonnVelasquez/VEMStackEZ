@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { Units } from "./units.model";
 import { YardLayout } from "./yard-layout.model";
 
@@ -14,8 +14,9 @@ export class Yard {
     stackPosition = 0;
     units: Units;
     getUnitFn: Function;
-    selectedUnit = new BehaviorSubject<unit | null>(null);
-    selectedWorkInstruction = new BehaviorSubject<string | null>(null);
+    // selectedUnit$ = new Subject<unit | null>();
+    // selectedUnit: unit | null = null;
+    // selectedWorkInstruction = new BehaviorSubject<string | null>(null);
 
     constructor(yardLayout: YardLayout, getUnitFn: Function) {
         this.start(yardLayout, getUnitFn);
@@ -60,13 +61,9 @@ export class Yard {
         return this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].RecordId;
     }
 
-    get thereIsUnitSelected() {
-        return this.selectedUnit.getValue() ? true : false;
-    }
 
-
-    getUnitWithPositionUdated(unit: unit) {
-        let newUnit = this.selectedUnit.getValue()?.unit;
+    getUnitWithPositionUdated(unit: unit, lostUnit: unit) {
+        let newUnit = lostUnit.unit;
         newUnit.StackRecordId = this.stackRecordId;
         newUnit.RowRecordId = this.rowRecordId;
         newUnit.Depth = unit.depth;
@@ -76,20 +73,22 @@ export class Yard {
     }
 
 
-    selectUnit(unit: unit) {
-        if (unit.unit) {
-            if (unit.type === "Unit") {
-                this.selectedUnit.next(unit);
-            } else {
-                this.selectedWorkInstruction.next(unit.unit.UnitNumber);
-            }
-        }
-    }
+    // selectUnit(unit: unit) {
+    //     if (unit.unit) {
+    //         if (unit.type === "Unit") {
+    //             this.selectedUnit$.next(unit);
+    //             this.selectedUnit = unit;
+    //         } else {
+    //             this.selectedWorkInstruction.next(unit.unit.UnitNumber);
+    //         }
+    //     }
+    // }
 
 
-    resetSelectedUnit() {
-        this.selectedUnit.next(null);
-    }
+    // resetSelectedUnit() {
+    //     this.selectedUnit$.next(null);
+    //     this.selectedUnit = null;
+    // }
 
     async nextRow() {
         this.stackPosition = 0;
