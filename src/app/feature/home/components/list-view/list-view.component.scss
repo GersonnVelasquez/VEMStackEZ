@@ -1,0 +1,22 @@
+.filters-area {
+    display: flex;
+    gap: 3rem;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    .filters-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        .filter {
+            display: flex;
+            flex-direction: column;
+            .title {
+                font-size: 12px;
+                font-weight: bold;
+            }
+            .description {
+                font-size: 1rem;
+            }
+        }
+    }
+}

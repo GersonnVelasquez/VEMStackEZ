@@ -9,14 +9,18 @@ import { IntructionsComponent } from './components/intructions/intructions.compo
 import { IntructionDialogComponent } from './components/intruction-dialog/intruction-dialog.component';
 import { StackModule } from '../stack/stack.module';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ListViewComponent } from './components/list-view/list-view.component';
+import { ListViewFilterDialogComponent } from './components/list-view-filter-dialog/list-view-filter-dialog.component';
 
 
 @NgModule({
   declarations: [
     HomeComponent,
     IntructionsComponent,
-    IntructionDialogComponent
+    IntructionDialogComponent,
+    ListViewComponent,
+    ListViewFilterDialogComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,8 @@ import { FormsModule } from '@angular/forms';
     MaterialModule,
     StackModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class HomeModule { }

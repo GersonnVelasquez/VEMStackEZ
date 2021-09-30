@@ -28,8 +28,16 @@ export class InstructionsService {
   }
 
   recalculateWorkInstruction(workInstruction: UnitAllocationPayload) {
-    console.log(workInstruction)
     return this.http.doPut(environment.svrBackEnd + 'api/WorkInstructions/UpdateWorkInstructionPosition', workInstruction).toPromise();
   }
+
+
+  getFilteredActiveUnits(filters: string) {
+    return this.http.doGet(environment.svrBackEnd + 'api/ClerkStackEZ/GetFilteredActiveUnits?' + filters).toPromise();
+  }
+
+
+
+
 
 }

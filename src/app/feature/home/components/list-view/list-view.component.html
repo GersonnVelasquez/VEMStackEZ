@@ -1,0 +1,43 @@
+<h2>Filtros Aplicados
+  <button mat-icon-button (click)="filter()">
+    <i class="fas fa-filter"></i>
+  </button>
+</h2>
+<h2 *ngIf="!currentFilters">NONE</h2>
+<div *ngIf="currentFilters" class="filters-area">
+  <div class="filters-section">
+    <div class="filter">
+      <span class="title">Unit Number</span>
+      <span class="description">{{currentFilters.unitNumber}}</span>
+    </div>
+    <div class="filter">
+      <span class="title">Yard</span>
+      <span class="description">{{currentFilters.yardId}}</span>
+    </div>
+  </div>
+  <div class="filters-section">
+    <div class="filter">
+      <span class="title">Customer</span>
+      <span class="description">{{currentFilters.customer}}</span>
+    </div>
+    <div class="filter">
+      <span class="title">Equipment Size Type</span>
+      <span class="description">{{currentFilters.equipmentSizeType}}</span>
+    </div>
+  </div>
+  <div class="filters-section">
+    <div class="filter">
+      <span class="title">Unit Grade</span>
+      <span class="description">{{currentFilters.unitGrade}}</span>
+    </div>
+    <div class="filter">
+      <span class="title">Unit Status</span>
+      <span class="description">{{currentFilters.unitStatus}}</span>
+    </div>
+  </div>
+</div>
+
+<h2>Active Units</h2>
+<mat-list>
+  <mat-list-item *ngFor="let unit of activeUnits?.ActiveUnits">{{unit.UnitNumber}}</mat-list-item>
+</mat-list>

@@ -9,6 +9,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [],
@@ -22,7 +23,8 @@ import { MatListModule } from '@angular/material/list';
     MatRippleModule,
     MatDialogModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ],
   exports: [
     MatFormFieldModule,
@@ -33,7 +35,8 @@ import { MatListModule } from '@angular/material/list';
     MatRippleModule,
     MatDialogModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule
   ]
 })
 export class MaterialModule { }

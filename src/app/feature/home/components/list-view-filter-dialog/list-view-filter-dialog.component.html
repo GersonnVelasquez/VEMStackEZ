@@ -1,0 +1,54 @@
+<h1 mat-dialog-title>Filter</h1>
+<div mat-dialog-content>
+    <div class="content">
+        <form [formGroup]="filterForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Unit Number</mat-label>
+                <input formControlName="unitNumber" matInput type="text">
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Customers</mat-label>
+                <mat-select formControlName="customer">
+                    <mat-option value="-1">All</mat-option>
+                    <mat-option *ngFor="let customer of customers" [value]="customer.CustomerId">
+                        {{customer.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Equipment Size Types</mat-label>
+                <mat-select formControlName="equipmentSizeType">
+                    <mat-option value="-1">All</mat-option>
+                    <mat-option *ngFor="let equipmentSizeType of equipmentSizeTypes"
+                        [value]="equipmentSizeType.RecordId">
+                        {{equipmentSizeType.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Unit Grades</mat-label>
+                <mat-select formControlName="unitGrade">
+                    <mat-option value="-1">All</mat-option>
+                    <mat-option *ngFor="let unitGrade of unitGrades" [value]="unitGrade.RecordId">
+                        {{unitGrade.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Units Status</mat-label>
+                <mat-select formControlName="unitStatus">
+                    <mat-option value="-1">All</mat-option>
+                    <mat-option *ngFor="let unitsStatus of unitsStatus" [value]="unitsStatus.RecordId">
+                        {{unitsStatus.Name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+
+    </div>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="setFilters()">Ok</button>
+    <button mat-button matDialogClose>Cancel</button>
+</div>

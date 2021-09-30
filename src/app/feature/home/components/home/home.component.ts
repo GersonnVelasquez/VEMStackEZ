@@ -72,6 +72,14 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
+  get showListView() {
+    if (this.currentOption === Options.LISTVIEW) {
+      return true;
+    }
+    return false;
+  }
+
+
   get showSplit() {
     if (this.currentOption === Options.SPLIP) {
       return true;
@@ -89,5 +97,6 @@ export class HomeComponent implements OnInit {
 enum Options {
   INSTRUCTION = '1',
   INVENTORY = '2',
-  SPLIP = '3'
+  SPLIP = '3',
+  LISTVIEW = '4'
 }
