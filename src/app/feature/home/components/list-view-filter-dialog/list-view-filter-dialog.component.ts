@@ -80,10 +80,10 @@ export interface filters {
 }
 
 export interface filter {
+  unitNumber: string;
+  yardId: string;
   customer: string;
   equipmentSizeType: string;
   unitGrade: string;
   unitStatus: string;
-  unitNumber: string;
-  yardId: string;
 }

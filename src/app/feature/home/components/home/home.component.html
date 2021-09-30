@@ -2,16 +2,16 @@
     <div class="content">
         <div class="options-area">
             <div class="options">
-                <button [class.active-option]="currentOption === Options.INSTRUCTION" class="button active-option"
+                <button [disabled]="watingForSelectLocation || isntructionMode"  [class.active-option]="currentOption === Options.INSTRUCTION" class="button active-option"
                     (click)="segmentChanged(Options.INSTRUCTION)" mat-flat-button>INSTRUCTIONS</button>
                 <button [class.active-option]="currentOption === Options.INVENTORY" class="button"
                     (click)="segmentChanged(Options.INVENTORY)" mat-flat-button>INVENTORY</button>
-                <button [class.active-option]="currentOption === Options.LISTVIEW" class="button"
+                <button [disabled]="watingForSelectLocation || isntructionMode" [class.active-option]="currentOption === Options.LISTVIEW" class="button"
                     (click)="segmentChanged(Options.LISTVIEW)" mat-flat-button>LISTVIEW</button>
                 <div [class.active-option]="currentOption === Options.SPLIP" class="button options">
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetRight()"
                         mat-flat-button>L</button>
-                    <button class="button" (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIP</button>
+                    <button [disabled]="watingForSelectLocation || isntructionMode" class="button" (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIP</button>
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetLeft()"
                         mat-flat-button>R</button>
                 </div>
