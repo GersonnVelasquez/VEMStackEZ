@@ -1,43 +1,42 @@
-<h2>Filtros Aplicados
+<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
   <button mat-icon-button (click)="filter()">
     <i class="fas fa-filter"></i>
   </button>
-</h2>
-<h2 *ngIf="!currentFilters">NONE</h2>
-<div *ngIf="currentFilters" class="filters-area">
-  <div class="filters-section">
-    <div class="filter">
-      <span class="title">Unit Number</span>
-      <span class="description">{{currentFilters.unitNumber}}</span>
-    </div>
-    <div class="filter">
-      <span class="title">Yard</span>
-      <span class="description">{{currentFilters.yardId}}</span>
-    </div>
-  </div>
-  <div class="filters-section">
-    <div class="filter">
-      <span class="title">Customer</span>
-      <span class="description">{{currentFilters.customer}}</span>
-    </div>
-    <div class="filter">
-      <span class="title">Equipment Size Type</span>
-      <span class="description">{{currentFilters.equipmentSizeType}}</span>
-    </div>
-  </div>
-  <div class="filters-section">
-    <div class="filter">
-      <span class="title">Unit Grade</span>
-      <span class="description">{{currentFilters.unitGrade}}</span>
-    </div>
-    <div class="filter">
-      <span class="title">Unit Status</span>
-      <span class="description">{{currentFilters.unitStatus}}</span>
-    </div>
-  </div>
+  <span style="font-size: 1.2rem;">
+    Filters
+  </span>
+  <span *ngIf="!currentFilters">All</span>
+  <span *ngIf="currentFilters">{{currentFilters.unitNumber ? currentFilters.unitNumber +' - ': ''}}
+    {{currentFilters.customer ? currentFilters.customer +' - ': ''}} {{currentFilters.equipmentSizeType?
+    currentFilters.equipmentSizeType +' - ': ''}} {{currentFilters.unitGrade? currentFilters.unitGrade +' - ': ''}}
+    {{currentFilters.unitStatus}} </span>
 </div>
 
+
 <h2>Active Units</h2>
-<mat-list>
-  <mat-list-item *ngFor="let unit of activeUnits?.ActiveUnits">{{unit.UnitNumber}}</mat-list-item>
-</mat-list>
+<div class="instruction-panel">
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Unit Number</th>
+        <th>Customer</th>
+        <th>Yard</th>
+        <th>Equipmen Size</th>
+        <th>Unit Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr (click)="selectUnit(unit)" *ngFor="let unit of activeUnits?.ActiveUnits;let i = index">
+        <td>{{i +1}}</td>
+        <td>{{unit.UnitNumber}}</td>
+        <td>{{unit.Customer?.Name}}</td>
+        <td>{{unit.YardLocation}}</td>
+        <td>{{unit.UnitStatus?.Description}}</td>
+        <td>{{unit.EquipmentSizeType?.Description}}</td>
+        <td>{{unit.UnitGrade}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 style="text-align: center; padding: 1rem;" *ngIf="thereAreUnits">NO RECORDS FOUNDS</h3>
+</div>

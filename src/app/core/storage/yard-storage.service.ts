@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { Options } from 'src/app/feature/home/components/home/home.component';
 import { unit } from 'src/app/feature/stack/shared/models/yard.model';
 
 @Injectable()
@@ -13,6 +14,9 @@ export class YardStorageService {
   watingForSelectLocation$ = new Subject<emiter>();
   cancelWatingForSelectLocation$ = new Subject<emiter>();
   instructionSelected$ = new Subject<emiter>();
+  cancelWorkInstructionSelected$ = new BehaviorSubject<boolean>(false);
+  homeTabChange$ = new Subject<Options>();
+  isWaitingFromListView$ = new Subject<emiter>();
   constructor() { }
 }
 

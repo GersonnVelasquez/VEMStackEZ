@@ -39,6 +39,12 @@ export class HomeComponent implements OnInit {
         this.segmentChanged(Options.INVENTORY);
       }
     });
+
+    this.yardStorageService.homeTabChange$.subscribe(segment => {
+      this.segmentChanged(segment);
+    });
+
+
   }
 
 
@@ -94,7 +100,7 @@ export class HomeComponent implements OnInit {
 }
 
 
-enum Options {
+export enum Options {
   INSTRUCTION = '1',
   INVENTORY = '2',
   SPLIP = '3',

@@ -51,7 +51,7 @@ export class ListViewFilterDialogComponent implements OnInit {
   }
 
   getFilterString() {
-    return `UnitNumber=${this.getUnitNumber}&CustomerId=${this.customer.value}&YardId=${this.yardId.value}&UnitStatusId=${this.unitStatus.value}&EquipmentSizeTypeId=${this.equipmentSizeType.value}&EquipmentGradeId=${this.unitGrade.value}`
+    return `UnitNumber=${this.getUnitNumber}&CustomerId=${this.customer.value !== '' ? this.customer.value : -1}&YardId=${this.yardId.value !== '' ? this.yardId.value : -1}&UnitStatusId=${this.unitStatus.value !== '' ? this.unitStatus.value : -1}&EquipmentSizeTypeId=${this.equipmentSizeType.value !== '' ? this.equipmentSizeType.value : -1}&EquipmentGradeId=${this.unitGrade.value !== '' ? this.unitGrade.value : -1}`
   }
 
   get getUnitNumber() {
@@ -68,6 +68,10 @@ export class ListViewFilterDialogComponent implements OnInit {
       unitStatus: this.unitsStatus.filter(i => i.RecordId === this.unitStatus.value)[0]?.Name,
       yardId: this.yardId?.value
     }
+
+    if(!filter.unitNumber && !filter.customer && !filter.unitGrade  && !filter.equipmentSizeType  && !filter.unitStatus ){
+      return null
+    } 
     return filter;
   }
 
@@ -76,7 +80,7 @@ export class ListViewFilterDialogComponent implements OnInit {
 
 export interface filters {
   filterString: string;
-  filters: filter
+  filters: filter | null
 }
 
 export interface filter {

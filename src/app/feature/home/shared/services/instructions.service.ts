@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Instruction } from '../models/instruction.model';
 import { UnitAllocationPayload } from '../models/unit-allocation-payload.model';
+import { Units } from 'src/app/feature/stack/shared/models/units.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,13 @@ export class InstructionsService {
 
 
   getFilteredActiveUnits(filters: string) {
-    return this.http.doGet(environment.svrBackEnd + 'api/ClerkStackEZ/GetFilteredActiveUnits?' + filters).toPromise();
+    return this.http.doGet(environment.svrBackEnd + 'api/ClerkStackEZ/GetFilteredActiveUnits?' + filters).pipe(
+      map(item => {
+        let res: Units = item
+        return res;
+      })
+    ).toPromise();
+    // return this.http.doGet(environment.svrBackEnd + 'api/ClerkStackEZ/GetFilteredActiveUnits?' + filters).toPromise();
   }
 
 

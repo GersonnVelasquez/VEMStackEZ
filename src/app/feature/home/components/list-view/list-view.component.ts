@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Units } from 'src/app/feature/stack/shared/models/units.model';
+import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
+import { ActiveUnit, Units } from 'src/app/feature/stack/shared/models/units.model';
+import { unit } from 'src/app/feature/stack/shared/models/yard.model';
 import { InstructionsService } from '../../shared/services/instructions.service';
 import { filter, filters, ListViewFilterDialogComponent } from '../list-view-filter-dialog/list-view-filter-dialog.component';
 
@@ -10,11 +12,14 @@ import { filter, filters, ListViewFilterDialogComponent } from '../list-view-fil
   styleUrls: ['./list-view.component.scss']
 })
 export class ListViewComponent implements OnInit {
-  currentFilters: filter;
+  currentFilters: filter | null;
   activeUnits: Units;
 
-  constructor(public dialog: MatDialog, private instructionService: InstructionsService) { }
+  constructor(public dialog: MatDialog, private instructionService: InstructionsService, private yardStorageService: YardStorageService) { }
 
+  get thereAreUnits(){
+    return this.activeUnits?.ActiveUnits?.length <= 0;
+  }
   ngOnInit(): void {
     this.getFilteredActiveUnits();
   }
@@ -31,6 +36,21 @@ export class ListViewComponent implements OnInit {
 
   async getFilteredActiveUnits(filters?: string) {
     this.activeUnits = await this.instructionService.getFilteredActiveUnits(filters ? filters : 'UnitNumber=null&CustomerId=-1&YardId=3&UnitStatusId=-1&EquipmentSizeTypeId=-1&EquipmentGradeId=-1');
+  }
+
+
+  selectUnit(unit: ActiveUnit) {
+    let newUnit: unit = {
+      unit: unit,
+      type: 'Unit',
+      depth: unit.Depth,
+      height: unit.Height,
+      stackId: unit.StackRecordId,
+      rowId: unit.RowRecordId
+    }
+    this.yardStorageService.isntructionMode$.next({ data: true, origen: 'listView' });
+    this.yardStorageService.unitSelected$.next(newUnit);
+    this.yardStorageService.isWaitingFromListView$.next({data:true, origen:'listView'})
   }
 
 }

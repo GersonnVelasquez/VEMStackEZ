@@ -13,6 +13,7 @@ import { LostUnitDialogComponent } from '../lost-unit-dialog/lost-unit-dialog.co
 import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
 import { NewUnitDialogComponent } from '../new-unit-dialog/new-unit-dialog.component';
 import { ActiveUnit, Units } from '../../shared/models/units.model';
+import { Options } from 'src/app/feature/home/components/home/home.component';
 
 @Component({
   selector: 'app-stack',
@@ -28,6 +29,7 @@ export class StackComponent implements OnInit {
   yard: Yard;
   watingForSelectLocation = false;
   creatingWorkInstruction = false;
+  isWaitingFromListView = false;
   @Input() instancia: string;
 
   constructor(private stackServices: StackService, private auth: AuthStateService, private yardStorageService: YardStorageService, public dialog: MatDialog) {
@@ -35,6 +37,12 @@ export class StackComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.yardStorageService.isWaitingFromListView$.subscribe(data => {
+      this.isWaitingFromListView = data.data;
+    });
+
+
     this.yardStorageService.isntructionMode$.subscribe(mode => {
       this.creatingWorkInstruction = mode.data;
       if (mode.data) {
@@ -192,9 +200,10 @@ export class StackComponent implements OnInit {
   async updateUnitLocation(unit: unit) {
     if (this.unitSelected) {
       if (this.creatingWorkInstruction) {
-        await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit, this.unitSelected))
+        await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit, this.unitSelected));
+        this.verityAndResetDataIfWaintinFromListView();
       } else {
-        await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit, this.unitSelected))
+        await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit, this.unitSelected));
       }
     }
   }
@@ -204,7 +213,16 @@ export class StackComponent implements OnInit {
   }
 
   resetSelectedUnit() {
-    this.yardStorageService.unitSelected$.next(null)
+    this.yardStorageService.unitSelected$.next(null);
+    this.verityAndResetDataIfWaintinFromListView();
+  }
+
+  verityAndResetDataIfWaintinFromListView() {
+    if (this.isWaitingFromListView) {
+      this.yardStorageService.isWaitingFromListView$.next({ origen: this.instancia, data: false });
+      this.yardStorageService.homeTabChange$.next(Options.LISTVIEW);
+      this.yardStorageService.isntructionMode$.next({ data: false, origen: this.instancia });
+    }
   }
 
 
@@ -285,7 +303,7 @@ export class StackComponent implements OnInit {
         await this.yard.setManualStackByRecordId(result.StackRecordId);
         let unitSearched: unit = {
           depth: result.Depth,
-          height: result.Height -1,
+          height: result.Height - 1,
           rowId: result.RowRecordId,
           stackId: result.StackRecordId,
           type: 'Unit',

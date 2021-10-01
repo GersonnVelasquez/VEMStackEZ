@@ -6,10 +6,9 @@
                     <span>Menu</span>
                 </div>
                 <mat-list>
-                    <mat-list-item (click)="enterWorkInstructionMode(); close()" *ngIf="!isInstructionMode" matRipple>Enter
-                        WorkInstruction Mode</mat-list-item>
-                    <mat-list-item (click)="exitWorkInstructionMode(); close()" *ngIf="isInstructionMode" matRipple>Exit
-                        WorkInstruction Mode</mat-list-item>
+                    <mat-list-item (click)="changeWorkInstructionMode(); close()"  matRipple>
+                        <span *ngIf="!isInstructionMode">Enter </span><span *ngIf="isInstructionMode">Exit </span> WorkInstruction Mode</mat-list-item>
+    
                 </mat-list>
             </div>
             <div class="sing-out">

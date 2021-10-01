@@ -18,17 +18,18 @@ export class MenuComponent implements OnInit {
     this.auth.isSessionActive$.subscribe(data=>{
       this.isSessionActive =data;
     });
+
+    this.yardStorageService.isntructionMode$.subscribe(({data})=>{
+      console.log(data)
+      this.isInstructionMode = data;
+    });
   }
 
 
 
-  enterWorkInstructionMode() {
-    this.yardStorageService.isntructionMode$.next({ origen: 'Nemu', data: true });
+  changeWorkInstructionMode() {
+    this.yardStorageService.isntructionMode$.next({ origen: 'Nemu', data: !this.yardStorageService.isntructionMode$.getValue().data });
     this.isInstructionMode = true;
-  }
-  exitWorkInstructionMode() {
-    this.yardStorageService.isntructionMode$.next({ origen: 'Nemu', data: false });
-    this.isInstructionMode = false;
   }
 
   async signOut() {

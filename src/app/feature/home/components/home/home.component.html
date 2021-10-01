@@ -7,11 +7,11 @@
                 <button [class.active-option]="currentOption === Options.INVENTORY" class="button"
                     (click)="segmentChanged(Options.INVENTORY)" mat-flat-button>INVENTORY</button>
                 <button [disabled]="watingForSelectLocation || isntructionMode" [class.active-option]="currentOption === Options.LISTVIEW" class="button"
-                    (click)="segmentChanged(Options.LISTVIEW)" mat-flat-button>LISTVIEW</button>
+                    (click)="segmentChanged(Options.LISTVIEW)" mat-flat-button>LIST</button>
                 <div [class.active-option]="currentOption === Options.SPLIP" class="button options">
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetRight()"
                         mat-flat-button>L</button>
-                    <button [disabled]="watingForSelectLocation || isntructionMode" class="button" (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIP</button>
+                    <button [disabled]="watingForSelectLocation || isntructionMode" class="button" (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIT</button>
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetLeft()"
                         mat-flat-button>R</button>
                 </div>
@@ -66,7 +66,7 @@
                 </div>
 
             </div>
-            <div class="list-view" *ngIf="showListView">
+            <div class="list-view" [class.hide]="!showListView">
                 <app-list-view></app-list-view>
             </div>
         </div>
