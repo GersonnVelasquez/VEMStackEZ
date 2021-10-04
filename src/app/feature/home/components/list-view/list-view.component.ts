@@ -4,6 +4,7 @@ import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { ActiveUnit, Units } from 'src/app/feature/stack/shared/models/units.model';
 import { unit } from 'src/app/feature/stack/shared/models/yard.model';
 import { InstructionsService } from '../../shared/services/instructions.service';
+import { Options } from '../home/home.component';
 import { filter, filters, ListViewFilterDialogComponent } from '../list-view-filter-dialog/list-view-filter-dialog.component';
 
 @Component({
@@ -48,9 +49,9 @@ export class ListViewComponent implements OnInit {
       stackId: unit.StackRecordId,
       rowId: unit.RowRecordId
     }
-    this.yardStorageService.isntructionMode$.next({ data: true, origen: 'listView' });
+    this.yardStorageService.isWaitingFromListView$.next({data:true, origen:'listView'});
     this.yardStorageService.unitSelected$.next(newUnit);
-    this.yardStorageService.isWaitingFromListView$.next({data:true, origen:'listView'})
+    this.yardStorageService.homeTabChange$.next(Options.INVENTORY)
   }
 
 }

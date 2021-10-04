@@ -38,7 +38,7 @@ export class StackComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.yardStorageService.isWaitingFromListView$.subscribe(data => {
+    this.yardStorageService.isWaitingFromListView$.subscribe(async (data) => {
       this.isWaitingFromListView = data.data;
     });
 
@@ -82,6 +82,11 @@ export class StackComponent implements OnInit {
 
     this.yardStorageService.unitSelected$.subscribe(async (unit) => {
       this.unitSelected = unit;
+      if (this.isWaitingFromListView && this.unitSelected) {
+        await this.yard.setManualRowByRecordId(this.unitSelected.rowId);
+        await this.yard.setManualStackByRecordId(this.unitSelected.stackId);
+        this.scrollIntoViewElementSelected(this.unitSelected.unit.RecordId)
+      }
     });
     this.getYardLayout();
   }
@@ -201,7 +206,6 @@ export class StackComponent implements OnInit {
     if (this.unitSelected) {
       if (this.creatingWorkInstruction) {
         await this.stackServices.createWorkInstruction(this.yard.getUnitWithPositionUdated(unit, this.unitSelected));
-        this.verityAndResetDataIfWaintinFromListView();
       } else {
         await this.stackServices.updateUnitLocation(this.yard.getUnitWithPositionUdated(unit, this.unitSelected));
       }
@@ -212,16 +216,18 @@ export class StackComponent implements OnInit {
     return this.stackServices.getUnits(row, yardId);
   }
 
-  resetSelectedUnit() {
+  resetSelectedUnit(verifyWaitingFromList = false) {
     this.yardStorageService.unitSelected$.next(null);
-    this.verityAndResetDataIfWaintinFromListView();
+    if (verifyWaitingFromList) {
+      this.verityAndResetDataIfWaintinFromListView();
+    }
+
   }
 
   verityAndResetDataIfWaintinFromListView() {
     if (this.isWaitingFromListView) {
       this.yardStorageService.isWaitingFromListView$.next({ origen: this.instancia, data: false });
       this.yardStorageService.homeTabChange$.next(Options.LISTVIEW);
-      this.yardStorageService.isntructionMode$.next({ data: false, origen: this.instancia });
     }
   }
 
@@ -309,9 +315,6 @@ export class StackComponent implements OnInit {
           type: 'Unit',
           unit: result
         }
-
-        console.log(unitSearched);
-
         this.yardStorageService.unitSelected$.next(unitSearched);
         this.scrollIntoViewElementSelected(result.RecordId)
       }

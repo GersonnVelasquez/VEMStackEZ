@@ -52,7 +52,7 @@
     </div>
     <div *ngIf="unitSelected || isInstructionSelected" style="height:13%; background: white; width: 100%;">
         <div *ngIf="unitSelected" class="unitCard">
-            <button (click)="resetSelectedUnit()" class="close" mat-icon-button><i
+            <button (click)="resetSelectedUnit(true)" class="close" mat-icon-button><i
                     class="fas fa-times-circle"></i></button>
             <button (click)="lostUnit()" class="lost" mat-icon-button>
                 <i class="fas fa-question-circle"></i></button>
