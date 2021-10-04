@@ -1,4 +1,4 @@
-<div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+<div class="filters">
   <button mat-icon-button (click)="filter()">
     <i class="fas fa-filter"></i>
   </button>
@@ -6,14 +6,23 @@
     Filters
   </span>
   <span *ngIf="!currentFilters">All</span>
-  <span *ngIf="currentFilters">{{currentFilters.unitNumber ? currentFilters.unitNumber +' - ': ''}}
-    {{currentFilters.customer ? currentFilters.customer +' - ': ''}} {{currentFilters.equipmentSizeType?
-    currentFilters.equipmentSizeType +' - ': ''}} {{currentFilters.unitGrade? currentFilters.unitGrade +' - ': ''}}
-    {{currentFilters.unitStatus}} </span>
+  <span *ngIf="currentFilters?.unitNumber">
+    {{currentFilters?.unitNumber}}
+  </span>
+  <span *ngIf="currentFilters?.customer">
+    {{currentFilters?.customer}}
+  </span>
+  <span *ngIf="currentFilters?.equipmentSizeType">
+    {{currentFilters?.equipmentSizeType}}
+  </span>
+  <span *ngIf="currentFilters?.unitGrade">
+    {{ currentFilters?.unitGrade}}
+  </span>
+  <span *ngIf="currentFilters?.unitStatus">
+    {{currentFilters?.unitStatus }}
+  </span>
+  <button *ngIf="currentFilters" (click)="resetFilters()" mat-icon-button><i class="fas fa-times"></i></button>
 </div>
-
-
-<h2>Active Units</h2>
 <div class="instruction-panel">
   <table>
     <thead>
@@ -22,6 +31,7 @@
         <th>Unit Number</th>
         <th>Customer</th>
         <th>Yard</th>
+        <th>Unit Status</th>
         <th>Equipmen Size</th>
         <th>Unit Grade</th>
       </tr>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { ActiveUnit, Units } from 'src/app/feature/stack/shared/models/units.model';
@@ -13,12 +13,14 @@ import { filter, filters, ListViewFilterDialogComponent } from '../list-view-fil
   styleUrls: ['./list-view.component.scss']
 })
 export class ListViewComponent implements OnInit {
-  currentFilters: filter | null;
+  currentFilters: filter | null = null;
+  filtersDataFrom: filter | null = null;
   activeUnits: Units;
+  @Input() instancia: string;
 
   constructor(public dialog: MatDialog, private instructionService: InstructionsService, private yardStorageService: YardStorageService) { }
 
-  get thereAreUnits(){
+  get thereAreUnits() {
     return this.activeUnits?.ActiveUnits?.length <= 0;
   }
   ngOnInit(): void {
@@ -26,17 +28,26 @@ export class ListViewComponent implements OnInit {
   }
 
   filter() {
-    const dialogRef = this.dialog.open(ListViewFilterDialogComponent);
+    const dialogRef = this.dialog.open(ListViewFilterDialogComponent, {
+      data: this.filtersDataFrom
+    });
     dialogRef.afterClosed().subscribe((result: filters) => {
       if (result) {
         this.getFilteredActiveUnits(result.filterString);
         this.currentFilters = result.filters;
+        this.filtersDataFrom = result.filtersForm;
       }
     });
   }
 
   async getFilteredActiveUnits(filters?: string) {
     this.activeUnits = await this.instructionService.getFilteredActiveUnits(filters ? filters : 'UnitNumber=null&CustomerId=-1&YardId=3&UnitStatusId=-1&EquipmentSizeTypeId=-1&EquipmentGradeId=-1');
+  }
+
+  resetFilters() {
+    this.getFilteredActiveUnits();
+    this.currentFilters = null;
+    this.filtersDataFrom = null;
   }
 
 
@@ -49,9 +60,12 @@ export class ListViewComponent implements OnInit {
       stackId: unit.StackRecordId,
       rowId: unit.RowRecordId
     }
-    this.yardStorageService.isWaitingFromListView$.next({data:true, origen:'listView'});
+    this.yardStorageService.isWaitingFromListView$.next({ data: true, origen: this.instancia });
     this.yardStorageService.unitSelected$.next(newUnit);
-    this.yardStorageService.homeTabChange$.next(Options.INVENTORY)
+    if (this.instancia === 'listView') {
+      this.yardStorageService.homeTabChange$.next({ data: Options.INVENTORY, origen: this.instancia });
+    }
+
   }
 
 }

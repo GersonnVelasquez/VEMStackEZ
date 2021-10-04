@@ -17,6 +17,8 @@ export class HomeComponent implements OnInit {
   options = {
     showStack1: false,
     showStack2: false,
+    showList1: false,
+    showList2: false,
     showInstruction1: false,
     showInstruction2: false,
     panel1Ok: false,
@@ -29,19 +31,21 @@ export class HomeComponent implements OnInit {
     this.yardStorageService.isntructionMode$.subscribe(mode => {
       this.isntructionMode = mode.data;
       if (mode.data) {
-        this.segmentChanged(Options.INVENTORY);
+        this.change(Options.INVENTORY);
       }
     });
 
     this.yardStorageService.watingForSelectLocation$.subscribe(isWaiting => {
       this.watingForSelectLocation = isWaiting.data;
       if (isWaiting.data) {
-        this.segmentChanged(Options.INVENTORY);
+        this.change(Options.INVENTORY);
       }
     });
 
     this.yardStorageService.homeTabChange$.subscribe(segment => {
-      this.segmentChanged(segment);
+      if (segment.data) {
+        this.change(segment.data);
+      }
     });
 
 
@@ -52,6 +56,7 @@ export class HomeComponent implements OnInit {
     this.options.panel2Ok = false;
     this.options.showInstruction2 = false;
     this.options.showStack2 = false;
+    this.options.showList2 = false;
   }
 
 
@@ -59,6 +64,7 @@ export class HomeComponent implements OnInit {
     this.options.panel1Ok = false;
     this.options.showInstruction1 = false;
     this.options.showStack1 = false;
+    this.options.showList1 = false;
   }
 
 
@@ -94,8 +100,12 @@ export class HomeComponent implements OnInit {
   }
 
 
-  segmentChanged(event: Options) {
+  change(event: Options) {
     this.currentOption = event;
+  }
+
+  segmentChanged(event: Options) {
+    this.yardStorageService.homeTabChange$.next({ data: event, origen: 'Home' });
   }
 }
 

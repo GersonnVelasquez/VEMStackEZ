@@ -15,9 +15,9 @@ export class YardStorageService {
   cancelWatingForSelectLocation$ = new Subject<emiter>();
   instructionSelected$ = new Subject<emiter>();
   cancelWorkInstructionSelected$ = new BehaviorSubject<boolean>(false);
-  homeTabChange$ = new Subject<Options>();
+  homeTabChange$ = new BehaviorSubject<emiter>({ data: null, origen: 'Inicial' });
   isWaitingFromListView$ = new Subject<emiter>();
-  
+
   constructor() { }
 }
 

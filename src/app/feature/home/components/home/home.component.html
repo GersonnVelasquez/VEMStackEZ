@@ -12,7 +12,7 @@
                 <div [class.active-option]="currentOption === Options.SPLIP" class="button options">
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetRight()"
                         mat-flat-button>L</button>
-                    <button [disabled]="watingForSelectLocation || isntructionMode" class="button"
+                    <button [disabled]="watingForSelectLocation" class="button"
                         (click)="segmentChanged(Options.SPLIP);" mat-flat-button>SPLIT</button>
                     <button [disabled]="currentOption !== Options.SPLIP" class="button" (click)="resetLeft()"
                         mat-flat-button>R</button>
@@ -31,33 +31,43 @@
                 <div class="panel">
                     <div class="area">
                         <div *ngIf="!options.panel1Ok" class="options">
-                            <button (click)="options.showInstruction1 = true; options.panel1Ok = true"
-                                mat-flat-button>Show Instructions</button>
-                            <button (click)="options.showStack1 = true; options.panel1Ok = true" mat-flat-button>Show
-                                Stack</button>
+                            <button  (click)="options.showInstruction1 = true; options.panel1Ok = true" mat-flat-button>
+                                Show Instructions
+                            </button>
+                            <button (click)="options.showStack1 = true; options.panel1Ok = true" mat-flat-button>
+                                Show Stack
+                            </button>
+                            <button *ngIf="!isntructionMode" (click)="options.showList1 = true; options.panel1Ok = true" mat-flat-button>
+                                Show List
+                            </button>
                         </div>
 
                         <app-stack *ngIf="options.showStack1" [instancia]="'2'"></app-stack>
-                        <app-intructions [instancia]="'instruction2'" *ngIf="options.showInstruction1">
-                        </app-intructions>
+                        <app-intructions [instancia]="'instruction2'" *ngIf="options.showInstruction1"></app-intructions>
+                        <app-list-view [instancia]="'listView1'" *ngIf="options.showList1 && !isntructionMode"></app-list-view>
                     </div>
                     <div class="area">
                         <div *ngIf="!options.panel2Ok" class="options">
-                            <button (click)="options.showInstruction2 = true; options.panel2Ok = true"
-                                mat-flat-button>Show Instructions</button>
-                            <button (click)="options.showStack2 = true; options.panel2Ok = true" mat-flat-button>Show
-                                Stack</button>
+                            <button  (click)="options.showInstruction2 = true; options.panel2Ok = true" mat-flat-button>
+                                Show Instructions
+                            </button>
+                            <button (click)="options.showStack2 = true; options.panel2Ok = true" mat-flat-button>
+                                Show Stack
+                            </button>
+                            <button *ngIf="!isntructionMode" (click)="options.showList2 = true; options.panel2Ok = true" mat-flat-button>
+                                Show List
+                            </button>
                         </div>
 
                         <app-stack *ngIf="options.showStack2" [instancia]="'3'"></app-stack>
-                        <app-intructions [instancia]="'instruction3'" *ngIf="options.showInstruction2">
-                        </app-intructions>
+                        <app-intructions [instancia]="'instruction3'" *ngIf="options.showInstruction2"></app-intructions>
+                        <app-list-view [instancia]="'listView2'" *ngIf="options.showList2 && !isntructionMode"></app-list-view>
                     </div>
                 </div>
 
             </div>
             <div class="list-view" [class.hide]="!showListView">
-                <app-list-view></app-list-view>
+                <app-list-view [instancia]="'listView'"></app-list-view>
             </div>
         </div>
     </div>

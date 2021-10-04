@@ -227,7 +227,11 @@ export class StackComponent implements OnInit {
   verityAndResetDataIfWaintinFromListView() {
     if (this.isWaitingFromListView) {
       this.yardStorageService.isWaitingFromListView$.next({ origen: this.instancia, data: false });
-      this.yardStorageService.homeTabChange$.next(Options.LISTVIEW);
+      
+      if (this.yardStorageService.homeTabChange$.getValue().origen === 'listView') {
+        this.yardStorageService.homeTabChange$.next({ data: Options.LISTVIEW, origen: this.instancia });
+      }
+
     }
   }
 

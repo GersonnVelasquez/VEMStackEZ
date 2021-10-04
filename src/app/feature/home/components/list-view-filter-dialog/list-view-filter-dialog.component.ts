@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FilterService } from '../../shared/services/filter.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class ListViewFilterDialogComponent implements OnInit {
   yardId = new FormControl(3);
 
   constructor(
-    public dialogRef: MatDialogRef<ListViewFilterDialogComponent>, private filterService: FilterService) {
+    public dialogRef: MatDialogRef<ListViewFilterDialogComponent>, private filterService: FilterService, @Inject(MAT_DIALOG_DATA) public data: filter) {
 
   }
 
@@ -36,6 +36,10 @@ export class ListViewFilterDialogComponent implements OnInit {
       unitNumber: this.unitNumber,
       yardId: this.yardId
     });
+    if (this.data) {
+      this.filterForm.patchValue(this.data);
+    }
+
     this.customers = await this.filterService.getCustomer();
     this.equipmentSizeTypes = await this.filterService.getEquipmentSizeTypes();
     this.unitGrades = await this.filterService.getUnitGrades();
@@ -45,7 +49,8 @@ export class ListViewFilterDialogComponent implements OnInit {
   setFilters(): void {
     let filters: filters = {
       filterString: this.getFilterString(),
-      filters: this.getFilters()
+      filters: this.getFilters(),
+      filtersForm: this.filterForm.value
     }
     this.dialogRef.close(filters);
   }
@@ -69,9 +74,9 @@ export class ListViewFilterDialogComponent implements OnInit {
       yardId: this.yardId?.value
     }
 
-    if(!filter.unitNumber && !filter.customer && !filter.unitGrade  && !filter.equipmentSizeType  && !filter.unitStatus ){
+    if (!filter.unitNumber && !filter.customer && !filter.unitGrade && !filter.equipmentSizeType && !filter.unitStatus) {
       return null
-    } 
+    }
     return filter;
   }
 
@@ -80,7 +85,8 @@ export class ListViewFilterDialogComponent implements OnInit {
 
 export interface filters {
   filterString: string;
-  filters: filter | null
+  filters: filter | null,
+  filtersForm: filter
 }
 
 export interface filter {
