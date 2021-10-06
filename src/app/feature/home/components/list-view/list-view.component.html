@@ -28,22 +28,43 @@
     <thead>
       <tr>
         <th>No.</th>
-        <th>Unit Number</th>
-        <th>Customer</th>
-        <th>Yard</th>
-        <th>Unit Status</th>
-        <th>Equipmen Size</th>
-        <th>Unit Grade</th>
+        <th (click)="setOrden('UnitNumber')">Unit Number <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'UnitNumber'" class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'UnitNumber'" class="fas fa-long-arrow-alt-down"></i>
+        </th>
+        <th (click)="setOrden('customerName')">Customer <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'customerName'" class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'customerName'" class="fas fa-long-arrow-alt-down"></i>
+        </th>
+        <th (click)="setOrden('YardLocation')">Yard <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'YardLocation'" class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'YardLocation'" class="fas fa-long-arrow-alt-down"></i>
+        </th>
+        <th (click)="setOrden('UnitStatusDescription')">Unit Status <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'UnitStatusDescription'"
+            class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'UnitStatusDescription'"
+            class="fas fa-long-arrow-alt-down"></i> </th>
+        <th (click)="setOrden('EquipmentSizeTypeDescription')">Equipmen Size <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'EquipmentSizeTypeDescription'"
+            class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'EquipmentSizeTypeDescription'"
+            class="fas fa-long-arrow-alt-down"></i> </th>
+        <th (click)="setOrden('UnitGrade')">Unit Grade <i
+            *ngIf="orden?.orden === 'asc' && orden?.columna === 'UnitGrade'" class="fas fa-long-arrow-alt-up"></i> <i
+            *ngIf="orden?.orden === 'desc' && orden?.columna === 'UnitGrade'" class="fas fa-long-arrow-alt-down"></i>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr (click)="selectUnit(unit)" *ngFor="let unit of activeUnits?.ActiveUnits;let i = index">
+      <tr (click)="selectUnit(unit)"
+        *ngFor="let unit of activeUnits?.ActiveUnits | sortBy:orden?.orden :orden?.columna;let i = index ">
         <td>{{i +1}}</td>
         <td>{{unit.UnitNumber}}</td>
-        <td>{{unit.Customer?.Name}}</td>
+        <td>{{unit.customerName}}</td>
         <td>{{unit.YardLocation}}</td>
-        <td>{{unit.UnitStatus?.Description}}</td>
-        <td>{{unit.EquipmentSizeType?.Description}}</td>
+        <td>{{unit.UnitStatusDescription}}</td>
+        <td>{{unit.EquipmentSizeTypeDescription}}</td>
         <td>{{unit.UnitGrade}}</td>
       </tr>
     </tbody>

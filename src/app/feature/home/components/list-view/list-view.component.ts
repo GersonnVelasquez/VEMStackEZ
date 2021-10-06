@@ -16,6 +16,11 @@ export class ListViewComponent implements OnInit {
   currentFilters: filter | null = null;
   filtersDataFrom: filter | null = null;
   activeUnits: Units;
+  orden: {
+    columna: string,
+    orden: 'asc' | 'desc'
+  }
+    | null = null;
   @Input() instancia: string;
 
   constructor(public dialog: MatDialog, private instructionService: InstructionsService, private yardStorageService: YardStorageService) { }
@@ -25,6 +30,37 @@ export class ListViewComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getFilteredActiveUnits();
+  }
+
+
+  setOrden(columna: string) {
+
+    if (this.orden === null) {
+      this.orden = {
+        orden: 'asc',
+        columna: columna
+      }
+      return;
+    }
+    if (this.orden.columna === columna && this.orden.orden === 'desc') {
+      this.orden = null;
+      return;
+    }
+    if (this.orden?.columna === columna) {
+      this.orden = {
+        orden: 'desc',
+        columna: columna
+      }
+      return;
+    }
+    if (this.orden?.columna !== columna) {
+      this.orden = {
+        orden: 'asc',
+        columna: columna
+      }
+      return;
+    }
+
   }
 
   filter() {
@@ -42,6 +78,15 @@ export class ListViewComponent implements OnInit {
 
   async getFilteredActiveUnits(filters?: string) {
     this.activeUnits = await this.instructionService.getFilteredActiveUnits(filters ? filters : 'UnitNumber=null&CustomerId=-1&YardId=3&UnitStatusId=-1&EquipmentSizeTypeId=-1&EquipmentGradeId=-1');
+    this.activeUnits.ActiveUnits = this.activeUnits.ActiveUnits.map(data => {
+      let res = {
+        ...data,
+        customerName: data.Customer?.Name,
+        UnitStatusDescription: data.UnitStatus?.Description,
+        EquipmentSizeTypeDescription: data.EquipmentSizeType?.Description,
+      }
+      return res;
+    })
   }
 
   resetFilters() {

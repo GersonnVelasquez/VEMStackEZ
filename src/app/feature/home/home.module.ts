@@ -30,7 +30,8 @@ import { ListViewFilterDialogComponent } from './components/list-view-filter-dia
     StackModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class HomeModule { }

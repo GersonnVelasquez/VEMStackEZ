@@ -32,6 +32,9 @@ export interface ActiveUnit {
     UpdatedBy: any
     UpdatedOn: any
     YardLocation: string
+    customerName?:string
+    UnitStatusDescription?:string
+    EquipmentSizeTypeDescription?:string
 
 }
 
