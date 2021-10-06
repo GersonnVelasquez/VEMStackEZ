@@ -12,15 +12,14 @@ import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 export class MenuComponent implements OnInit {
   isSessionActive = false;
   isInstructionMode = false;
-  constructor(private auth: AuthStateService, private router: Router, private yardStorageService: YardStorageService,private menu: MenuController) { }
+  constructor(private auth: AuthStateService, private router: Router, private yardStorageService: YardStorageService, private menu: MenuController) { }
 
   ngOnInit(): void {
-    this.auth.isSessionActive$.subscribe(data=>{
-      this.isSessionActive =data;
+    this.auth.isSessionActive$.subscribe((data: boolean) => {
+      this.isSessionActive = data;
     });
 
-    this.yardStorageService.isntructionMode$.subscribe(({data})=>{
-      console.log(data)
+    this.yardStorageService.isntructionMode$.subscribe(({ data }) => {
       this.isInstructionMode = data;
     });
   }

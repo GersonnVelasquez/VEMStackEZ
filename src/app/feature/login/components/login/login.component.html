@@ -8,12 +8,12 @@
             <form autocomplete="off">
                 <mat-form-field appearance="outline">
                     <mat-label>User Id</mat-label>
-                    <input #user matInput>
+                    <input class="no-uppercase" #user matInput>
                     <mat-icon matSuffix fontSet="fas" fontIcon="fa-user"></mat-icon>
                 </mat-form-field>
                 <mat-form-field appearance="outline">
                     <mat-label>Password</mat-label>
-                    <input #pass matInput [type]="hide ? 'password' : 'text'">
+                    <input class="no-uppercase" #pass matInput [type]="hide ? 'password' : 'text'">
                     <button mat-icon-button matSuffix (click)="hide = !hide">
                         <mat-icon *ngIf="!hide" fontSet="fas" fontIcon="fa-eye"></mat-icon>
                         <mat-icon *ngIf="hide" fontSet="fas" fontIcon="fa-eye-slash"></mat-icon>

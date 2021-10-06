@@ -1,4 +1,4 @@
-<ion-menu side="start" menuId="menu" contentId="main" *ngIf="isSessionActive">
+<ion-menu side="start" menuId="menu" contentId="main" [swipeGesture]="isSessionActive">
     <ion-content>
         <div class="menu">
             <div>
@@ -7,7 +7,7 @@
                 </div>
                 <mat-list>
                     <mat-list-item (click)="changeWorkInstructionMode(); close()"  matRipple>
-                        <span *ngIf="!isInstructionMode">Enter </span><span *ngIf="isInstructionMode">Exit </span> WorkInstruction Mode</mat-list-item>
+                        <span *ngIf="!isInstructionMode">Enter WorkInstruction Mode</span><span *ngIf="isInstructionMode">Exit WorkInstruction Mode</span></mat-list-item>
     
                 </mat-list>
             </div>

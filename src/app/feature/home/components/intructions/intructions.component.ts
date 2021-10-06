@@ -34,7 +34,6 @@ export class IntructionsComponent implements OnInit, OnDestroy {
     });
 
     this.yardStorageService.workInstructionSelected$.subscribe(unitNumber => {
-      console.log(unitNumber)
       if (unitNumber.destino === this.instancia) {
         let instruction = this.instructions.filter(i => i.UnitNumber === unitNumber.data);
         if (instruction.length > 0) {
@@ -150,7 +149,6 @@ export class IntructionsComponent implements OnInit, OnDestroy {
       workInstruction: instruction,
       activeUnits: null
     }
-console.log(JSON.stringify(instructionToRecalculate) )
     await this.instructionsServerices.recalculateWorkInstruction(instructionToRecalculate);
   }
 

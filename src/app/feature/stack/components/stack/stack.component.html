@@ -37,10 +37,10 @@
                         [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
                         matRipple *ngFor="let unit of inventory[i]">
 
-                        <span
-                            *ngIf="unit?.type === 'Instruction'">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
-                        <span
-                            *ngIf="unit?.type === 'Unit'">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                        <span class="top-left">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                        <span class="top-right">{{unit?.unit?.UnitStatus?.Name}}</span>
+                        <span class="bottom-right">{{unit?.unit?.UnitISO}}</span>
+                        <span class="bottom-left">{{unit?.unit?.Customer?.Name}}</span>
                     </td>
                 </tr>
                 <tr *ngIf="inventory">

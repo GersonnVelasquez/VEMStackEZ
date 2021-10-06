@@ -8,7 +8,7 @@
         </button>
     </mat-form-field>
 
-    <p *ngIf="activeUnits.length <= 0 && searched" style="text-align: center;">TEXTO DE NO ENCONTRADO</p>
+    <p *ngIf="activeUnits.length <= 0 && searched" style="text-align: center;">NO RECORDS FOUND</p>
     <mat-list role="list">
         <mat-list-item *ngFor="let unit of activeUnits" (click)="close(unit)" matRipple>{{unit.UnitNumber}}</mat-list-item>
     </mat-list>

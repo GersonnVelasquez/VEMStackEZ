@@ -171,3 +171,32 @@ td {
     max-height: 100px;
     font-weight: bold;
 }
+
+
+.top-left{
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.top-right{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 11px;
+}
+
+.bottom-right{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 11px;
+}
+.bottom-left{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 11px;
+}
