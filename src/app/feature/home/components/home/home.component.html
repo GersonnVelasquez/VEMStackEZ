@@ -31,37 +31,37 @@
                 <div class="panel">
                     <div class="area">
                         <div *ngIf="!options.panel1Ok" class="options">
-                            <button  (click)="options.showInstruction1 = true; options.panel1Ok = true" mat-flat-button>
+                            <button *ngIf="!isntructionMode"  (click)="options.showInstruction1 = true; options.panel1Ok = true" mat-flat-button>
                                 Show Instructions
                             </button>
                             <button (click)="options.showStack1 = true; options.panel1Ok = true" mat-flat-button>
                                 Show Stack
                             </button>
-                            <button *ngIf="!isntructionMode" (click)="options.showList1 = true; options.panel1Ok = true" mat-flat-button>
+                            <button  (click)="options.showList1 = true; options.panel1Ok = true" mat-flat-button>
                                 Show List
                             </button>
                         </div>
 
                         <app-stack *ngIf="options.showStack1" [instancia]="'2'"></app-stack>
-                        <app-intructions [instancia]="'instruction2'" *ngIf="options.showInstruction1"></app-intructions>
-                        <app-list-view [instancia]="'listView1'" *ngIf="options.showList1 && !isntructionMode"></app-list-view>
+                        <app-intructions [instancia]="'instruction2'" *ngIf="options.showInstruction1 && !isntructionMode"></app-intructions>
+                        <app-list-view [instancia]="'listView1'" *ngIf="options.showList1 "></app-list-view>
                     </div>
                     <div class="area">
                         <div *ngIf="!options.panel2Ok" class="options">
-                            <button  (click)="options.showInstruction2 = true; options.panel2Ok = true" mat-flat-button>
+                            <button *ngIf="!isntructionMode" (click)="options.showInstruction2 = true; options.panel2Ok = true" mat-flat-button>
                                 Show Instructions
                             </button>
                             <button (click)="options.showStack2 = true; options.panel2Ok = true" mat-flat-button>
                                 Show Stack
                             </button>
-                            <button *ngIf="!isntructionMode" (click)="options.showList2 = true; options.panel2Ok = true" mat-flat-button>
+                            <button  (click)="options.showList2 = true; options.panel2Ok = true" mat-flat-button>
                                 Show List
                             </button>
                         </div>
 
                         <app-stack *ngIf="options.showStack2" [instancia]="'3'"></app-stack>
-                        <app-intructions [instancia]="'instruction3'" *ngIf="options.showInstruction2"></app-intructions>
-                        <app-list-view [instancia]="'listView2'" *ngIf="options.showList2 && !isntructionMode"></app-list-view>
+                        <app-intructions [instancia]="'instruction3'" *ngIf="options.showInstruction2 && !isntructionMode"></app-intructions>
+                        <app-list-view [instancia]="'listView2'" *ngIf="options.showList2 "></app-list-view>
                     </div>
                 </div>
 

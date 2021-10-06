@@ -1,14 +1,14 @@
 <div class="content" [class.creating-instruction-bg]="creatingWorkInstruction">
-    <button (click)="updateData()" class="reload" mat-icon-button><i class="fas fa-sync"></i></button>
+    <button (click)="updateData()" class="reload" mat-icon-button><img width="20px" src="assets/viewRefreshBlack.png"></button>
     <div class="header">
         <div class="contentInfo">
             <div class="title">
                 <span>ROW</span>
             </div>
             <div class="options">
-                <button (click)="prevRow()" mat-icon-button><i class="fas fa-arrow-left"></i></button>
+                <button (click)="prevRow()" mat-icon-button> <img src="assets/arrow-left.png"></button>
                 <span (click)="openDialog('ROW')">{{yard?.rowNumber}}</span>
-                <button (click)="nextRow()" mat-icon-button><i class="fas fa-arrow-right"></i></button>
+                <button (click)="nextRow()" mat-icon-button><img src="assets/arrow-right.png"></button>
             </div>
         </div>
         <button (click)="openSearchDialog()" mat-icon-button><i class="fas fa-search"></i></button>
@@ -17,9 +17,9 @@
                 <span>STACK</span>
             </div>
             <div class="options">
-                <button (click)="prevStack()" mat-icon-button><i class="fas fa-arrow-left"></i></button>
+                <button (click)="prevStack()" mat-icon-button><img src="assets/arrow-left.png"></button>
                 <span (click)="openDialog('STACK')">{{yard?.stackNumber}}</span>
-                <button (click)="nextStack()" mat-icon-button><i class="fas fa-arrow-right"></i></button>
+                <button (click)="nextStack()" mat-icon-button><img src="assets/arrow-right.png"></button>
             </div>
         </div>
     </div>
@@ -36,8 +36,8 @@
                         [class.bg-instruction]="unit?.type === 'Instruction'"
                         [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
                         matRipple *ngFor="let unit of inventory[i]">
-
-                        <span class="top-left">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                        <span
+                            class="top-left">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
                         <span class="top-right">{{unit?.unit?.UnitStatus?.Name}}</span>
                         <span class="bottom-right">{{unit?.unit?.UnitISO}}</span>
                         <span class="bottom-left">{{unit?.unit?.Customer?.Name}}</span>
