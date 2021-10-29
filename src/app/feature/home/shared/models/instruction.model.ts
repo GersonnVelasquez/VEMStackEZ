@@ -46,7 +46,7 @@ export class Instruction {
 
 
     get cantCompleteTospecifiedYardLocation() {
-        if (this.To.toLocaleLowerCase() === 'pending') {
+        if (this.Status === 4) {
             return true;
         }
         return false;
