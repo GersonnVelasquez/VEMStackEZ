@@ -32,7 +32,7 @@ export class AuthStateService {
   async singIn(user: string, password: string, keep: boolean) {
     this.token = await this.authService.singIn(user, password);
     if (keep) {
-      await this.storage.setItem('token', this.token);
+      await this.storage.setItem('token', this.token, this.token.expires_in);
     }
     await this.getUserData(user, keep);
     this.isSessionActive$.next(true);
@@ -42,7 +42,7 @@ export class AuthStateService {
     this.authService.getUserData(userName).then(user => {
       this.userInfo$.next(user);
       if (keep) {
-        this.storage.setItem('user', user);
+        this.storage.setItem('user', user, this.token?.expires_in);
       }
     });
   }

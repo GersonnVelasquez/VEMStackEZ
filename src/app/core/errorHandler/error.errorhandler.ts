@@ -5,13 +5,12 @@ import { ErrorDialogComponent } from "./error-dialog/error-dialog.component";
 
 @Injectable()
 export class MyErrorHandler implements ErrorHandler {
-
     constructor(public dialog: MatDialog, private zone: NgZone) { }
 
     handleError(error: any) {
         let newError: any;
         if (!(error instanceof HttpErrorResponse)) {
-            newError = error?.rejection;
+            newError = error?.rejection; 
             if (!newError) {
                 newError = error;
             }

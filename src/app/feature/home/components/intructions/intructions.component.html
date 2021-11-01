@@ -1,9 +1,12 @@
 <div class="searchArea">
-    <mat-form-field style="width: 100%;" appearance="outline">
+    <mat-form-field style="width: 100%; height: 100;" appearance="outline">
         <mat-label>Search</mat-label>
         <input [(ngModel)]="search" autocomplete="off" matInput>
         <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
+    
+    <button  (click)="getInstructions()" mat-flat-button>Refresh <img width="20px"
+        src="assets/viewRefreshGreen.png"></button>
 </div>
 <div class="instruction-panel">
 
@@ -30,6 +33,4 @@
         </tbody>
     </table>
 
-    <button (click)="getInstructions()" class="reload" mat-icon-button><img width="20px"
-            src="assets/viewRefreshGreen.png"></button>
 </div>

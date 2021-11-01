@@ -1,5 +1,13 @@
 .searchArea{
     height: 12%;
+    display: flex;
+    gap: 10px;
+    button{
+        margin-top: 10px;
+        height: max-content;
+        width: auto;
+        background-color: honeydew;
+    }
 }
 
 .font-big{

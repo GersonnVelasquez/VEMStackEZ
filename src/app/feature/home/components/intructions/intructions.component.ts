@@ -8,6 +8,8 @@ import { InstructionsService } from '../../shared/services/instructions.service'
 import { IntructionDialogComponent } from '../intruction-dialog/intruction-dialog.component';
 import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { UnitAllocationPayload } from '../../shared/models/unit-allocation-payload.model';
+import { ViewDidLeave } from '@ionic/angular';
+import { NavigationEnd, Router } from '@angular/router';
 
 
 @Component({
@@ -26,7 +28,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
   @Input() instancia: string;
 
 
-  constructor(private instructionsServerices: InstructionsService, private auth: AuthStateService, public dialog: MatDialog, private yardStorageService: YardStorageService) { }
+  constructor(private router: Router,private instructionsServerices: InstructionsService, private auth: AuthStateService, public dialog: MatDialog, private yardStorageService: YardStorageService) { }
 
   ngOnInit(): void {
     this.yardStorageService.isntructionMode$.subscribe(mode => {
@@ -69,6 +71,16 @@ export class IntructionsComponent implements OnInit, OnDestroy {
         });
       }
     })
+
+    this.router.events.subscribe(
+      event => {
+        clearInterval(this.getInstructionsInterval);
+        if( event instanceof NavigationEnd ){
+          if(event.url === '/'){
+            console.log(event);
+          }       
+        }
+      });
   }
 
   getInstructions() {
@@ -78,6 +90,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
       });
     }
   }
+  
   ngOnDestroy() {
     clearInterval(this.getInstructionsInterval);
   }
