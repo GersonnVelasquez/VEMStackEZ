@@ -14,6 +14,7 @@ import { SearchDialogComponent } from '../search-dialog/search-dialog.component'
 import { NewUnitDialogComponent } from '../new-unit-dialog/new-unit-dialog.component';
 import { ActiveUnit, Units } from '../../shared/models/units.model';
 import { Options } from 'src/app/feature/home/components/home/home.component';
+import { ColorRulesService } from 'src/app/core/services/color-rules.service';
 
 @Component({
   selector: 'app-stack',
@@ -30,13 +31,23 @@ export class StackComponent implements OnInit {
   watingForSelectLocation = false;
   creatingWorkInstruction = false;
   isWaitingFromListView = false;
+  colorsRules: any[] = [];
+  colorRuleSelected: any;
   @Input() instancia: string;
 
-  constructor(private stackServices: StackService, private auth: AuthStateService, private yardStorageService: YardStorageService, public dialog: MatDialog) {
+  constructor(private colorRulesServices: ColorRulesService, private stackServices: StackService, private auth: AuthStateService, private yardStorageService: YardStorageService, public dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
+
+    this.colorRulesServices.colorRuleSelected$.subscribe(colorRule => {
+      if (colorRule) {
+        this.colorRuleSelected = colorRule;
+        this.yardStorageService.updateData$.next({ origen: this.instancia, data: 'Update' });
+      }
+    });
+
 
     this.yardStorageService.isWaitingFromListView$.subscribe(async (data) => {
       this.isWaitingFromListView = data.data;
@@ -95,6 +106,11 @@ export class StackComponent implements OnInit {
     return this.instructionSelected !== null;
   }
 
+
+  selectColorRule(colorRule: any) {
+    this.colorRulesServices.selectColorRule(colorRule);
+  }
+
   isUnitSelected(unit: unit) {
     if (unit.type === 'Unit') {
       if (unit?.unit?.RecordId === this.unitSelected?.unit?.RecordId) {
@@ -110,6 +126,8 @@ export class StackComponent implements OnInit {
     this.auth.userInfo$.subscribe(async (data) => {
       if (data) {
         this.yardLayout = await this.stackServices.getYardLayout(3); //cambiar id quemado
+        this.colorsRules = await this.colorRulesServices.getColorRulesData();
+        this.colorRuleSelected = this.colorRulesServices.colorRuleSelected$.getValue() ? this.colorRulesServices.colorRuleSelected$.getValue().RecordId:this.colorsRules[0];
         this.yard = new Yard(this.yardLayout, this.getUnits);
         this.yard.setInventory();
 
@@ -213,7 +231,7 @@ export class StackComponent implements OnInit {
   }
 
   getUnits = async (row: string, yardId: number) => {
-    return this.stackServices.getUnits(row, yardId);
+    return this.stackServices.getUnits(row, yardId, this.colorRuleSelected.RecordId);
   }
 
   resetSelectedUnit(verifyWaitingFromList = false) {
@@ -227,7 +245,7 @@ export class StackComponent implements OnInit {
   verityAndResetDataIfWaintinFromListView() {
     if (this.isWaitingFromListView) {
       this.yardStorageService.isWaitingFromListView$.next({ origen: this.instancia, data: false });
-      
+
       if (this.yardStorageService.homeTabChange$.getValue().origen === 'listView') {
         this.yardStorageService.homeTabChange$.next({ data: Options.LISTVIEW, origen: this.instancia });
       }

@@ -1,5 +1,6 @@
 <div class="content" [class.creating-instruction-bg]="creatingWorkInstruction">
     <button (click)="updateData()" class="reload" mat-icon-button><img width="20px" src="assets/viewRefreshBlack.png"></button>
+    <button class="search" (click)="openSearchDialog()" mat-icon-button><i class="fas fa-search"></i></button>
     <div class="header">
         <div class="contentInfo">
             <div class="title">
@@ -11,7 +12,14 @@
                 <button (click)="nextRow()" mat-icon-button><img src="assets/arrow-right.png"></button>
             </div>
         </div>
-        <button (click)="openSearchDialog()" mat-icon-button><i class="fas fa-search"></i></button>
+        <mat-form-field appearance="fill">
+            <mat-label>Color Rule Group</mat-label>
+            <mat-select [(ngModel)]="colorRuleSelected" (valueChange)="selectColorRule($event)">
+              <mat-option *ngFor="let colorRule of colorsRules" [value]="colorRule">
+                {{colorRule.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         <div class="contentInfo">
             <div class="title">
                 <span>STACK</span>
@@ -23,7 +31,7 @@
             </div>
         </div>
     </div>
-
+   
     <div class="table-area" [style.height]="unitSelected || isInstructionSelected ? '75%' : '90%'">
         <table>
             <tbody [id]="'table-'+instancia">

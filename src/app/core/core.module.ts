@@ -12,6 +12,7 @@ import { MyErrorHandler } from './errorHandler/error.errorhandler';
 import { MaterialModule } from '../tools/material/material.module';
 import { LoadingService } from './services/loading.service';
 import { HttpLoadingInterceptor } from './interceptors/http-loading.interceptor';
+import { ColorRulesService } from './services/color-rules.service';
 
 @NgModule({
   declarations:[
@@ -29,6 +30,7 @@ import { HttpLoadingInterceptor } from './interceptors/http-loading.interceptor'
     AuthStateService,
     YardStorageService,
     LoadingService,
+    ColorRulesService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true },
     { provide: ErrorHandler, useClass: MyErrorHandler },

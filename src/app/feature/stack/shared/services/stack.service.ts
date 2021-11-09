@@ -4,11 +4,12 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { YardLayout } from '../models/yard-layout.model';
 import { ActiveUnit, Units } from '../models/units.model';
+import { ColorRulesService } from 'src/app/core/services/color-rules.service';
 
 @Injectable()
 export class StackService {
 
-  constructor(private http: HttpService) { }
+  constructor(private http: HttpService, private colorRulesServices: ColorRulesService) { }
 
 
   // /getActiveYardLayout  ?id=LocationId
@@ -22,8 +23,8 @@ export class StackService {
     ).toPromise();
   }
 
-  getUnits(row: string, yardId: number) {
-    return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/GetInventory?row=${row}&YardId=${yardId}`).pipe(
+  getUnits(row: string, yardId: number, colorGroupId:number) {
+    return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/v2/GetInventory?row=${row}&YardId=${yardId}&colorCodeGroupId=${colorGroupId}`).pipe(
       map(item => {
         let res: Units = item
         return res;

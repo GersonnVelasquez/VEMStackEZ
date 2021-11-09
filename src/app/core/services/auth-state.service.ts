@@ -4,6 +4,7 @@ import { StorageService } from './storage.service';
 import { Token } from '../models/token.model';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
+import { ColorRulesService } from './color-rules.service';
 
 @Injectable()
 export class AuthStateService {
@@ -11,7 +12,7 @@ export class AuthStateService {
   userInfo$ = new BehaviorSubject<User | null>(null);
   token: Token | null = null;
 
-  constructor(private storage: StorageService, private authService: AuthService) {
+  constructor(private colorRules: ColorRulesService,private storage: StorageService, private authService: AuthService) {
     this.storage.getItem('user').then(async (user: User) => {
       if (user) {
         this.token = await this.storage.getItem('token');
@@ -39,8 +40,9 @@ export class AuthStateService {
   }
 
   async getUserData(userName: string, keep?: boolean) {
-    this.authService.getUserData(userName).then(user => {
+    this.authService.getUserData(userName).then(async (user) => {
       this.userInfo$.next(user);
+      await this.colorRules.getColorRules(user.Location.LocationId);
       if (keep) {
         this.storage.setItem('user', user, this.token?.expires_in);
       }
@@ -52,6 +54,7 @@ export class AuthStateService {
     await this.storage.removeItem('token');
     this.isSessionActive$.next(false);
     this.userInfo$.next(null);
+    this.colorRules.resetColorRuleSelected();
   }
 
 }

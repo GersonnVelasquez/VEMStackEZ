@@ -141,6 +141,7 @@ export class Yard {
 
     async getUnitsAndSetInventory() {
         this.units = await this.getUnitFn(this.rowNumber, this.yardLayout.RecordId);
+        console.log(this.units);
         this.setInventory();
     }
 
