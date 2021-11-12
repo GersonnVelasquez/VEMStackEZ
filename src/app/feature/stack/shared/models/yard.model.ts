@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subject } from "rxjs";
-import { Units } from "./units.model";
+import { ActiveUnit, Units, WorkInstruction } from "./units.model";
 import { YardLayout } from "./yard-layout.model";
 
 export class Yard {
@@ -49,6 +49,10 @@ export class Yard {
         });
     }
 
+    get isWheeled() {
+        return this.yardLayout.Rows[this.rowPosition].Wheeled;
+    }
+
     get stacksRecordIdInRow() {
         return this.yardLayout.Rows[this.rowPosition].Stacks.map(i => {
             return i.RecordId
@@ -76,10 +80,10 @@ export class Yard {
 
     getUnitWithPositionUdated(unit: unit, lostUnit: unit) {
         let newUnit = lostUnit.unit;
-        newUnit.StackRecordId = this.stackRecordId;
+        newUnit.StackRecordId = this.isWheeled ? unit.stackId : this.stackRecordId;
         newUnit.RowRecordId = this.rowRecordId;
-        newUnit.Depth = unit.depth;
-        newUnit.Height = unit.height - 1;
+        newUnit.Depth = this.isWheeled ? 1 : unit.depth;
+        newUnit.Height = this.isWheeled ? 0 : unit.height - 1;
 
         return newUnit;
     }
@@ -136,12 +140,12 @@ export class Yard {
         this.setInventory();
     }
 
- 
+
 
 
     async getUnitsAndSetInventory() {
         this.units = await this.getUnitFn(this.rowNumber, this.yardLayout.RecordId);
-        console.log(this.units);
+        console.log(this.units)
         this.setInventory();
     }
 
@@ -184,6 +188,16 @@ export class Yard {
         this.stack = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].RecordId;
         this.height = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].Height;
         this.depth = this.yardLayout.Rows[this.rowPosition].Stacks[this.stackPosition].Depth;
+        if (this.isWheeled) {
+            this.setWheeledInvetory();
+        }
+        else {
+            this.setNormalInvetory();
+        }
+    }
+
+
+    setNormalInvetory() {
         let heightArrar: unit[][] = [];
         let depthArrar: unit[] = [];
         for (let h = this.height; h > 0; h--) {
@@ -231,13 +245,72 @@ export class Yard {
         this.layout.next(heightArrar);
     }
 
+    setWheeledInvetory() {
+        let heightArrar: unit[][] = [];
+        let depthArrar: unit[] = [];
+        let depth = this.yardLayout.Rows[this.rowPosition].Stacks.length
+        for (let d = 0; d < depth; d++) {
+            let WorkInstruction = this.getWorkInstructions(0, d, this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId);
+            let ActiveUnit = this.getActiveUnits(0, d, this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId);
+            if (ActiveUnit) {
+                let unit: unit = {
+                    unit: ActiveUnit,
+                    type: "Unit",
+                    depth: 1,
+                    height: 0,
+                    stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
+                    rowId: this.rowRecordId
+                }
+                depthArrar.push(unit);
+            } else if (WorkInstruction) {
+                let unit: unit = {
+                    unit: WorkInstruction,
+                    type: "Instruction",
+                    depth: 1,
+                    height: 0,
+                    stackId: this.stackRecordId,
+                    rowId: this.rowRecordId
+                }
+                depthArrar.push(unit);
+            }
+            else {
+                let unit: unit = {
+                    unit: null,
+                    type: "Null",
+                    depth: 1,
+                    height: 0,
+                    stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
+                    rowId: this.rowRecordId
+                }
+                depthArrar.push(unit)
+            }
 
-    getWorkInstructions(Height: number, Depth: number) {
+
+        }
+
+        heightArrar.push(depthArrar);
+        this.layout.next(heightArrar);
+    }
+
+
+    getWorkInstructions(Height: number, Depth: number, StackRecordId?: number) {
         if (this.units) {
-            let unit = this.units.WorkInstructions.filter(i => i.RowRecordId === this.row &&
-                i.StackRecordId === this.stack &&
-                i.Depth === Depth &&
-                i.Height === Height)
+            let unit: WorkInstruction[];
+            if (this.isWheeled) {
+                unit = this.units.WorkInstructions.filter(i => i.RowRecordId === this.row &&
+                    i.StackRecordId === StackRecordId &&
+                    i.Depth === 1 &&
+                    i.Height === 0)
+            } else {
+                unit = this.units.WorkInstructions.filter(i => i.RowRecordId === this.row &&
+                    i.StackRecordId === this.stack &&
+                    i.Depth === Depth &&
+                    i.Height === Height)
+            }
+
+
+
+
             if (unit.length > 0) {
                 return unit[0];
             }
@@ -247,12 +320,21 @@ export class Yard {
     }
 
 
-    getActiveUnits(Height: number, Depth: number) {
+    getActiveUnits(Height: number, Depth: number, StackRecordId?: number) {
         if (this.units) {
-            let unit = this.units.ActiveUnits.filter(i => i.RowRecordId === this.row &&
-                i.StackRecordId === this.stack &&
-                i.Depth === Depth &&
-                i.Height === Height)
+            let unit: ActiveUnit[];
+            if (this.isWheeled) {
+                unit = this.units.ActiveUnits.filter(i => i.RowRecordId === this.row &&
+                    i.StackRecordId === StackRecordId &&
+                    i.Depth === 1 &&
+                    i.Height === 0)
+            } else {
+                unit = this.units.ActiveUnits.filter(i => i.RowRecordId === this.row &&
+                    i.StackRecordId === this.stack &&
+                    i.Depth === Depth &&
+                    i.Height === Height)
+            }
+
             if (unit.length > 0) {
                 return unit[0];
             }

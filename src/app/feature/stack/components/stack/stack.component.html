@@ -1,6 +1,7 @@
 <div class="content" [class.creating-instruction-bg]="creatingWorkInstruction">
-    <button (click)="updateData()" class="reload" mat-icon-button><img width="20px" src="assets/viewRefreshBlack.png"></button>
-    <button class="search" (click)="openSearchDialog()" mat-icon-button><i class="fas fa-search"></i></button>
+    <button (click)="updateData()" class="reload" mat-icon-button><img width="20px"
+            src="assets/viewRefreshBlack.png"></button>
+   
     <div class="header">
         <div class="contentInfo">
             <div class="title">
@@ -15,12 +16,21 @@
         <mat-form-field appearance="fill">
             <mat-label>Color Rule Group</mat-label>
             <mat-select [(ngModel)]="colorRuleSelected" (valueChange)="selectColorRule($event)">
-              <mat-option *ngFor="let colorRule of colorsRules" [value]="colorRule">
-                {{colorRule.Name}}
-              </mat-option>
+                <mat-option *ngFor="let colorRule of colorsRules" [value]="colorRule">
+                    {{colorRule.Name}}
+                </mat-option>
             </mat-select>
-          </mat-form-field>
-        <div class="contentInfo">
+        </mat-form-field>
+        <div  style="display: flex; justify-content: center; align-items: center; height: 100%;">
+            <button class="search" (click)="openSearchDialog()" mat-icon-button><i class="fas fa-search"></i></button>
+        </div>
+  
+        <div *ngIf="yard?.isWheeled" class="contentInfo">
+            <div class="title" style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                <span>WHEELED</span>
+            </div>
+        </div>
+        <div *ngIf="!yard?.isWheeled" class="contentInfo">
             <div class="title">
                 <span>STACK</span>
             </div>
@@ -31,16 +41,16 @@
             </div>
         </div>
     </div>
-   
+
     <div class="table-area" [style.height]="unitSelected || isInstructionSelected ? '75%' : '90%'">
-        <table>
+        <table *ngIf="!yard?.isWheeled">
             <tbody [id]="'table-'+instancia">
 
                 <tr *ngFor="let inv of inventory; let i = index">
                     <div class="numeros">
                         {{(inventory.length-1) -i +1 }}
                     </div>
-                    <td id="{{unit?.unit?.RecordId}}" (click)="selectLocation(unit)"
+                    <td class="td-normal" id="{{unit?.unit?.RecordId}}" (click)="selectLocation(unit)"
                         [class.bg-instruction]="unit?.type === 'Instruction'"
                         [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
                         matRipple *ngFor="let unit of inventory[i]">
@@ -57,6 +67,35 @@
                 </tr>
             </tbody>
         </table>
+
+        <table *ngIf="yard?.isWheeled">
+            <tbody [id]="'table-'+instancia">
+
+                <tr *ngFor="let inv of inventory; let i = index">
+                    <div class="numeros">
+                        {{inventory.length-i }}
+                    </div>
+                    <td class="td-wheeled" id="{{unit?.unit?.RecordId}}" (click)="selectLocation(unit)"
+                        [class.bg-instruction]="unit?.type === 'Instruction'"
+                        [style.background-color]="unit?.unit?.HexColorCode" [class.selectedUnit]="isUnitSelected(unit)"
+                        matRipple *ngFor="let unit of inventory[i]">
+                        <span
+                            class="top-left">{{unit?.unit?.UnitNumber.substring(0,4)}}<br>{{unit?.unit?.UnitNumber.substring(4,unit?.unit?.UnitNumber.length)}}</span>
+                        <span class="top-right">{{unit?.unit?.UnitStatus?.Name}}</span>
+                        <span class="bottom-right">{{unit?.unit?.UnitISO}}</span>
+                        <span class="bottom-left">{{unit?.unit?.Customer?.Name}}</span>
+                    </td>
+                </tr>
+                <tr *ngIf="inventory">
+                    <th></th>
+                    <th *ngFor="let letra of letras.slice(0,inventory[0]?.length)">{{letra}}</th>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
     </div>
     <div *ngIf="unitSelected || isInstructionSelected" style="height:13%; background: white; width: 100%;">
         <div *ngIf="unitSelected" class="unitCard">
