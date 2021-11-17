@@ -237,7 +237,7 @@ export class StackComponent implements OnInit {
   }
 
   getUnits = async (row: string, yardId: number) => {
-    return this.stackServices.getUnits(row, yardId, this.colorRuleSelected.RecordId);
+    return this.stackServices.getUnits(row, yardId, this.colorRuleSelected?.RecordId);
   }
 
   resetSelectedUnit(verifyWaitingFromList = false) {

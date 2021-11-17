@@ -33,7 +33,7 @@ import { ColorRulesService } from './services/color-rules.service';
     ColorRulesService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true },
-    { provide: ErrorHandler, useClass: MyErrorHandler },
+    // { provide: ErrorHandler, useClass: MyErrorHandler },
   ]
 })
 export class CoreModule { }
