@@ -62,7 +62,6 @@ export class HttpService {
     return this.http.post(url, body, { headers: headers }).pipe(
       map((res: any) => {
         let newRes = new Token(res);
-        
         return newRes;
       }));
   }

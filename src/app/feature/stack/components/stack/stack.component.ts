@@ -128,18 +128,22 @@ export class StackComponent implements OnInit {
 
 
   async getYardLayout() {
-    this.auth.userInfo$.subscribe(async (data) => {
+    this.auth.userInfo$.subscribe((data) => {
       if (data) {
-        this.yardLayout = await this.stackServices.getYardLayout(3); //cambiar id quemado
-        this.colorsRules = await this.colorRulesServices.getColorRulesData();
-        this.colorRuleSelected = this.colorRulesServices.colorRuleSelected$.getValue() ? this.colorRulesServices.colorRuleSelected$.getValue().RecordId:this.colorsRules[0];
-        
-        this.yard = new Yard(this.yardLayout, this.getUnits);
-        this.yard.setInventory();
-
-        this.yard.layout.subscribe(data => {
-          this.inventory = data;
-        });
+        this.auth.locationActive$.subscribe(async (location)=>{
+          if(location){
+            this.yardLayout = await this.stackServices.getYardLayout(location.LocationId);
+            this.colorsRules = await this.colorRulesServices.getColorRulesData();
+            this.colorRuleSelected = this.colorRulesServices.colorRuleSelected$.getValue() ? this.colorRulesServices.colorRuleSelected$.getValue().RecordId:this.colorsRules[0];
+            
+            this.yard = new Yard(this.yardLayout, this.getUnits);
+            this.yard.setInventory();
+    
+            this.yard.layout.subscribe(data => {
+              this.inventory = data;
+            });
+          }
+        })
       }
 
     });

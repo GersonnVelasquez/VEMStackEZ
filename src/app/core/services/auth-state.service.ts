@@ -3,16 +3,20 @@ import { BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
 import { Token } from '../models/token.model';
 import { AuthService } from './auth.service';
-import { User } from '../models/user.model';
+import { User, UserAccessLocation } from '../models/user.model';
 import { ColorRulesService } from './color-rules.service';
+import { Location } from 'src/app/feature/stack/shared/models/units.model';
+import { MatDialog } from '@angular/material/dialog';
+import { LocationSelectDialogComponent } from '../components/location-select-dialog/location-select-dialog.component';
 
 @Injectable()
 export class AuthStateService {
   isSessionActive$ = new BehaviorSubject<boolean>(false);
   userInfo$ = new BehaviorSubject<User | null>(null);
+  locationActive$ = new BehaviorSubject<UserAccessLocation | null>(null);
   token: Token | null = null;
 
-  constructor(private colorRules: ColorRulesService,private storage: StorageService, private authService: AuthService) {
+  constructor(private colorRules: ColorRulesService, private storage: StorageService, private authService: AuthService,public dialog: MatDialog) {
     this.storage.getItem('user').then(async (user: User) => {
       if (user) {
         this.token = await this.storage.getItem('token');
@@ -41,7 +45,24 @@ export class AuthStateService {
 
   async getUserData(userName: string, keep?: boolean) {
     this.authService.getUserData(userName).then(async (user) => {
+      console.log(user);
       this.userInfo$.next(user);
+
+      if (user.UserAccessLocations.length > 0) {
+        const dialogRef = this.dialog.open(LocationSelectDialogComponent, {
+          width: '350px',
+          data: user.UserAccessLocations,
+          disableClose: true
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          console.log(result);
+          this.locationActive$.next(result);
+        });
+      } else {
+        this.locationActive$.next(user.UserAccessLocations[0]);
+      }
+
       await this.colorRules.getColorRules(user.Location.LocationId);
       if (keep) {
         this.storage.setItem('user', user, this.token?.expires_in);

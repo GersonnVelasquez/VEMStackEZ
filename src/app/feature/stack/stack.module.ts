@@ -6,7 +6,7 @@ import { MaterialModule } from 'src/app/tools/material/material.module';
 import { ChoosePositionDialogComponent } from './components/choose-position-dialog/choose-position-dialog.component';
 import { LostUnitDialogComponent } from './components/lost-unit-dialog/lost-unit-dialog.component';
 import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewUnitDialogComponent } from './components/new-unit-dialog/new-unit-dialog.component';
 
 @NgModule({
@@ -20,7 +20,8 @@ import { NewUnitDialogComponent } from './components/new-unit-dialog/new-unit-di
   imports: [
     CommonModule,
     MaterialModule,
-    FormsModule
+    FormsModule, 
+    ReactiveFormsModule
   ], 
   providers:[
     StackService

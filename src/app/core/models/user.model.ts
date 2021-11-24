@@ -156,7 +156,7 @@ interface Role {
 }
 
 
-interface UserAccessLocation {
+export interface UserAccessLocation {
     RecordId: number;
     LocationId: number;
     Location: Location;

@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Select location</h1>
+<div mat-dialog-content>
+    <form [formGroup]="locationForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Locations</mat-label>
+            <mat-select formControlName="userLocation">
+              <mat-option *ngFor="let userLocation of userLocations" [value]="userLocation">
+                {{userLocation.Location.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </form>
+    
+</div>
+<div mat-dialog-actions>
+  <button (click)="selectLocation()" mat-button [disabled]="locationForm.invalid">Ok</button>
+</div>

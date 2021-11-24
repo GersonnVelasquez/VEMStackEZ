@@ -14,14 +14,21 @@ import { LoadingService } from './services/loading.service';
 import { HttpLoadingInterceptor } from './interceptors/http-loading.interceptor';
 import { ColorRulesService } from './services/color-rules.service';
 
+import { LocationSelectDialogComponent } from './components/location-select-dialog/location-select-dialog.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   declarations:[
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    LoadingComponent,
+    LocationSelectDialogComponent
   ],
   imports: [
     CommonModule,
     HttpClientModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   providers: [
     AuthService,
@@ -33,7 +40,7 @@ import { ColorRulesService } from './services/color-rules.service';
     ColorRulesService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpLoadingInterceptor, multi: true },
-    // { provide: ErrorHandler, useClass: MyErrorHandler },
+    { provide: ErrorHandler, useClass: MyErrorHandler },
   ]
 })
 export class CoreModule { }

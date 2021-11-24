@@ -1,8 +1,12 @@
-<h1 mat-dialog-title>New Unit</h1>
+<h1 mat-dialog-title>Enter Unit Number</h1>
 <div mat-dialog-content>
+    <mat-form-field appearance="outline" style="margin-right: 5px;">
+        <mat-label>Unit Prefix</mat-label>
+        <input maxlength="4" type="text" [(ngModel)]="unitPrefix" matInput>
+    </mat-form-field>
     <mat-form-field appearance="outline">
         <mat-label>Unit Number</mat-label>
-        <input [(ngModel)]="unitNumber" matInput>
+        <input (keyup)="validateNumber()"  maxlength="7" inputmode="numeric" type="text" [(ngModel)]="unitNumber" matInput>
     </mat-form-field>
 </div>
 <mat-dialog-actions align="end">

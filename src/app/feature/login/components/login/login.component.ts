@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ViewDidEnter, ViewDidLeave } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AuthStateService } from 'src/app/core/services/auth-state.service';
+import { LoadingService } from 'src/app/core/services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements ViewDidEnter, OnInit, ViewDidLeave {
   hide = true;
   keep = false;
   sessionSuscription: Subscription;
-  constructor(private auth: AuthStateService, private router: Router) { }
+  constructor(private auth: AuthStateService, private router: Router,private loading: LoadingService) { }
 
   ngOnInit() {
     this.sessionSuscription = this.auth.isSessionActive$.subscribe(active => {
@@ -34,8 +35,13 @@ export class LoginComponent implements ViewDidEnter, OnInit, ViewDidLeave {
     this.sessionSuscription.unsubscribe();
   }
 
-  singIn(user: string, password: string) {
-    this.auth.singIn(user, password, this.keep).then(() => this.router.navigateByUrl('Home', { replaceUrl: true })).catch(() => { throw new Error("Invalid Credentials") })
+  async singIn(user: string, password: string) {
+    try {
+      await this.auth.singIn(user, password, this.keep);
+      this.router.navigateByUrl('Home', { replaceUrl: true });
+    } catch (error) {
+      throw new Error('Invalid Credentials')
+    }
   }
 
 }
