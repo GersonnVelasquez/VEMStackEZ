@@ -22,6 +22,7 @@
     {{currentFilters?.unitStatus }}
   </span>
   <button *ngIf="currentFilters" (click)="resetFilters()" mat-icon-button><i class="fas fa-times"></i></button>
+  <button (click)="getFilteredActiveUnits()"  class="reload" mat-icon-button><img width="20px" src="assets/viewRefreshBlack.png"></button>
 </div>
 <div class="instruction-panel">
   <table>

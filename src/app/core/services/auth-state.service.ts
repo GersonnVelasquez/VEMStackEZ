@@ -45,10 +45,9 @@ export class AuthStateService {
 
   async getUserData(userName: string, keep?: boolean) {
     this.authService.getUserData(userName).then(async (user) => {
-      console.log(user);
       this.userInfo$.next(user);
 
-      if (user.UserAccessLocations.length > 0) {
+      if (user.UserAccessLocations.length > 1) {
         const dialogRef = this.dialog.open(LocationSelectDialogComponent, {
           width: '350px',
           data: user.UserAccessLocations,
@@ -56,7 +55,6 @@ export class AuthStateService {
         });
     
         dialogRef.afterClosed().subscribe(result => {
-          console.log(result);
           this.locationActive$.next(result);
         });
       } else {

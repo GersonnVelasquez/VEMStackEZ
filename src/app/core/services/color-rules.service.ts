@@ -14,19 +14,21 @@ export class ColorRulesService {
     .toPromise()
     .then(data=>{
       this.colorRules$.next(data);
-      console.log(data);
     });
   }
 
   getColorRulesData(): Promise<any[]>{
     return new Promise((resolve, reject) => {
-      this.colorRules$.subscribe(data => {
-        if(data){
-          resolve(data);
-        }
-      });
+      resolve(this.colorRules$.getValue());
     });
   }
+
+  getColorRulesSelected(): Promise<any>{
+    return new Promise((resolve, reject) => {
+      resolve(this.colorRuleSelected$.getValue());
+    });
+  }
+
 
   selectColorRule(colorRule: any) {
     this.colorRuleSelected$.next(colorRule);

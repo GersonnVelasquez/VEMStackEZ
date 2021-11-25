@@ -22,7 +22,6 @@
     color: black;
 }
 
-
 .creating-instruction-bg {
     background: repeating-linear-gradient(
             45deg,
@@ -192,8 +191,21 @@ tbody {
     font-weight: bold;
 }
 
+.numero-wheeled {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+}
 
-.top-left{
+.stackNumberWeleed{
+    position: absolute;
+    margin: auto;
+    bottom: -10px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+.top-left {
     position: absolute;
     top: 0;
     left: 0;
@@ -201,20 +213,20 @@ tbody {
     font-weight: 500;
 }
 
-.top-right{
+.top-right {
     position: absolute;
     top: 0;
     right: 0;
     font-size: 11px;
 }
 
-.bottom-right{
+.bottom-right {
     position: absolute;
     bottom: 0;
     right: 0;
     font-size: 11px;
 }
-.bottom-left{
+.bottom-left {
     position: absolute;
     bottom: 0;
     left: 0;

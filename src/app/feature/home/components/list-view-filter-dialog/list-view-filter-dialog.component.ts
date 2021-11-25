@@ -28,6 +28,8 @@ export class ListViewFilterDialogComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+
     this.filterForm = new FormGroup({
       customer: this.customer,
       equipmentSizeType: this.equipmentSizeType,
@@ -39,7 +41,6 @@ export class ListViewFilterDialogComponent implements OnInit {
     if (this.data) {
       this.filterForm.patchValue(this.data);
     }
-
     this.customers = await this.filterService.getCustomer();
     this.equipmentSizeTypes = await this.filterService.getEquipmentSizeTypes();
     this.unitGrades = await this.filterService.getUnitGrades();

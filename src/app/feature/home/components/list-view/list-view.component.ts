@@ -15,6 +15,7 @@ import { filter, filters, ListViewFilterDialogComponent } from '../list-view-fil
 export class ListViewComponent implements OnInit {
   currentFilters: filter | null = null;
   filtersDataFrom: filter | null = null;
+  currentFiltersString: string | null = null;;
   activeUnits: Units;
   orden: {
     columna: string,
@@ -65,19 +66,23 @@ export class ListViewComponent implements OnInit {
 
   filter() {
     const dialogRef = this.dialog.open(ListViewFilterDialogComponent, {
-      data: this.filtersDataFrom
+      data: this.filtersDataFrom,
+      width: '350px',
     });
     dialogRef.afterClosed().subscribe((result: filters) => {
       if (result) {
-        this.getFilteredActiveUnits(result.filterString);
+
         this.currentFilters = result.filters;
         this.filtersDataFrom = result.filtersForm;
+        this.currentFiltersString = result.filterString;
+        this.getFilteredActiveUnits();
       }
     });
   }
 
-  async getFilteredActiveUnits(filters?: string) {
-    this.activeUnits = await this.instructionService.getFilteredActiveUnits(filters ? filters : 'UnitNumber=null&CustomerId=-1&YardId=3&UnitStatusId=-1&EquipmentSizeTypeId=-1&EquipmentGradeId=-1');
+  async getFilteredActiveUnits() {
+    let filters = this.currentFiltersString;;
+    this.activeUnits = await this.instructionService.getFilteredActiveUnits(filters !== null ? filters : 'UnitNumber=null&CustomerId=-1&YardId=3&UnitStatusId=-1&EquipmentSizeTypeId=-1&EquipmentGradeId=-1');
     this.activeUnits.ActiveUnits = this.activeUnits.ActiveUnits.map(data => {
       let res = {
         ...data,
@@ -90,9 +95,10 @@ export class ListViewComponent implements OnInit {
   }
 
   resetFilters() {
-    this.getFilteredActiveUnits();
     this.currentFilters = null;
     this.filtersDataFrom = null;
+    this.currentFiltersString = null;
+    this.getFilteredActiveUnits();
   }
 
 

@@ -82,7 +82,7 @@ export class Yard {
         let newUnit = lostUnit.unit;
         newUnit.StackRecordId = this.isWheeled ? unit.stackId : this.stackRecordId;
         newUnit.RowRecordId = this.rowRecordId;
-        newUnit.Depth = this.isWheeled ? 1 : unit.depth;
+        newUnit.Depth = this.isWheeled ? 0 : unit.depth;
         newUnit.Height = this.isWheeled ? 0 : unit.height - 1;
 
         return newUnit;
@@ -144,9 +144,8 @@ export class Yard {
 
 
     async getUnitsAndSetInventory() {
-        if(this.yardLayout){
+        if (this.yardLayout) {
             this.units = await this.getUnitFn(this.rowNumber, this.yardLayout.RecordId);
-            console.log(this.units)
             this.setInventory();
         }
     }
@@ -258,20 +257,22 @@ export class Yard {
                 let unit: unit = {
                     unit: ActiveUnit,
                     type: "Unit",
-                    depth: 1,
+                    depth: 0,
                     height: 0,
                     stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
-                    rowId: this.rowRecordId
+                    rowId: this.rowRecordId,
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
                 }
                 depthArrar.push(unit);
             } else if (WorkInstruction) {
                 let unit: unit = {
                     unit: WorkInstruction,
                     type: "Instruction",
-                    depth: 1,
+                    depth: 0,
                     height: 0,
-                    stackId: this.stackRecordId,
-                    rowId: this.rowRecordId
+                    stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
+                    rowId: this.rowRecordId,
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
                 }
                 depthArrar.push(unit);
             }
@@ -279,10 +280,11 @@ export class Yard {
                 let unit: unit = {
                     unit: null,
                     type: "Null",
-                    depth: 1,
+                    depth: 0,
                     height: 0,
                     stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
-                    rowId: this.rowRecordId
+                    rowId: this.rowRecordId,
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
                 }
                 depthArrar.push(unit)
             }
@@ -301,7 +303,7 @@ export class Yard {
             if (this.isWheeled) {
                 unit = this.units.WorkInstructions.filter(i => i.RowRecordId === this.row &&
                     i.StackRecordId === StackRecordId &&
-                    i.Depth === 1 &&
+                    i.Depth === 0 &&
                     i.Height === 0)
             } else {
                 unit = this.units.WorkInstructions.filter(i => i.RowRecordId === this.row &&
@@ -328,7 +330,7 @@ export class Yard {
             if (this.isWheeled) {
                 unit = this.units.ActiveUnits.filter(i => i.RowRecordId === this.row &&
                     i.StackRecordId === StackRecordId &&
-                    i.Depth === 1 &&
+                    i.Depth === 0 &&
                     i.Height === 0)
             } else {
                 unit = this.units.ActiveUnits.filter(i => i.RowRecordId === this.row &&
@@ -353,5 +355,6 @@ export interface unit {
     depth: number,
     height: number,
     stackId: number,
-    rowId: number
+    rowId: number,
+    stackNumber?: string
 }

@@ -7,12 +7,14 @@
     <span><strong>Movement Type: </strong>{{instruction?.movementType}}</span>
 
     <div class="button-area">
-        <button [disabled]="instruction?.cantCompleteTospecifiedYardLocation" mat-button (click)="close('Complete')">I
-            completed the move to the specified yard location
+        <button [disabled]="instruction?.cantCompleteTospecifiedYardLocation" mat-button (click)="close('Complete')">
+            I completed the move to the specified yard location
         </button>
         <button mat-button (click)="close('Move')">
             I completed the move to a different yard location
         </button>
     </div>
+
+
 
 </div>

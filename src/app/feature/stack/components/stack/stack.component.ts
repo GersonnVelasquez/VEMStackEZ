@@ -1,11 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
 import { AuthStateService } from 'src/app/core/services/auth-state.service';
 import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { YardLayout } from '../../shared/models/yard-layout.model';
 import { unit, Yard } from '../../shared/models/yard.model';
 import { StackService } from '../../shared/services/stack.service';
-import { filter, take } from 'rxjs/operators';
 import { Instruction } from 'src/app/feature/home/shared/models/instruction.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ChoosePositionDialogComponent } from '../choose-position-dialog/choose-position-dialog.component';
@@ -45,6 +43,7 @@ export class StackComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
 
     this.colorRulesServices.colorRuleSelected$.subscribe(colorRule => {
       if (colorRule) {
@@ -130,15 +129,13 @@ export class StackComponent implements OnInit {
   async getYardLayout() {
     this.auth.userInfo$.subscribe((data) => {
       if (data) {
-        this.auth.locationActive$.subscribe(async (location)=>{
-          if(location){
+        this.auth.locationActive$.subscribe(async (location) => {
+          if (location) {
             this.yardLayout = await this.stackServices.getYardLayout(location.LocationId);
             this.colorsRules = await this.colorRulesServices.getColorRulesData();
-            this.colorRuleSelected = this.colorRulesServices.colorRuleSelected$.getValue() ? this.colorRulesServices.colorRuleSelected$.getValue().RecordId:this.colorsRules[0];
-            
+            this.colorRuleSelected = await this.colorRulesServices.getColorRulesSelected() ? (await this.colorRulesServices.getColorRulesSelected()) : this.colorsRules[0];
             this.yard = new Yard(this.yardLayout, this.getUnits);
             this.yard.setInventory();
-    
             this.yard.layout.subscribe(data => {
               this.inventory = data;
             });
@@ -148,6 +145,10 @@ export class StackComponent implements OnInit {
 
     });
 
+  }
+
+  getUnits = async (row: string, yardId: number) => {
+    return this.stackServices.getUnits(row, yardId, this.colorRuleSelected?.RecordId);
   }
 
 
@@ -240,9 +241,6 @@ export class StackComponent implements OnInit {
     }
   }
 
-  getUnits = async (row: string, yardId: number) => {
-    return this.stackServices.getUnits(row, yardId, this.colorRuleSelected?.RecordId);
-  }
 
   resetSelectedUnit(verifyWaitingFromList = false) {
     this.yardStorageService.unitSelected$.next(null);

@@ -21,7 +21,7 @@
                     <mat-option value="-1">All</mat-option>
                     <mat-option *ngFor="let equipmentSizeType of equipmentSizeTypes"
                         [value]="equipmentSizeType.RecordId">
-                        {{equipmentSizeType.Name}}
+                        {{equipmentSizeType.Name + ' - ' + equipmentSizeType.Description}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -30,7 +30,7 @@
                 <mat-select formControlName="unitGrade">
                     <mat-option value="-1">All</mat-option>
                     <mat-option *ngFor="let unitGrade of unitGrades" [value]="unitGrade.RecordId">
-                        {{unitGrade.Name}}
+                        {{unitGrade.Name  + ' - ' + unitGrade.Description}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -39,7 +39,7 @@
                 <mat-select formControlName="unitStatus">
                     <mat-option value="-1">All</mat-option>
                     <mat-option *ngFor="let unitsStatus of unitsStatus" [value]="unitsStatus.RecordId">
-                        {{unitsStatus.Name}}
+                        {{unitsStatus.Name  + ' - ' + unitsStatus.Description}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>

@@ -72,7 +72,7 @@
             <tbody [id]="'table-'+instancia">
 
                 <tr *ngFor="let inv of inventory; let i = index">
-                    <div class="numeros">
+                    <div class="numeros numero-wheeled">
                         {{inventory.length-i }}
                     </div>
                     <td class="td-wheeled" id="{{unit?.unit?.RecordId}}" (click)="selectLocation(unit)"
@@ -86,9 +86,11 @@
                         <span class="bottom-left">{{unit?.unit?.Customer?.Name}}</span>
                     </td>
                 </tr>
-                <tr *ngIf="inventory">
+                <tr *ngFor="let inv of inventory; let i = index">
                     <th></th>
-                    <th *ngFor="let letra of letras.slice(0,inventory[0]?.length)">{{letra}}</th>
+                    <th *ngFor="let unit of inventory[i]">
+                      {{unit?.stackNumber}}
+                    </th>
                 </tr>
             </tbody>
         </table>
