@@ -212,7 +212,8 @@ export class Yard {
                         depth: d,
                         height: h,
                         stackId: this.stackRecordId,
-                        rowId: this.rowRecordId
+                        rowId: this.rowRecordId,
+                        isWheeled: this.isWheeled
                     }
                     depthArrar.push(unit);
                 } else if (WorkInstruction) {
@@ -222,7 +223,8 @@ export class Yard {
                         depth: d,
                         height: h,
                         stackId: this.stackRecordId,
-                        rowId: this.rowRecordId
+                        rowId: this.rowRecordId,
+                        isWheeled: this.isWheeled
                     }
                     depthArrar.push(unit);
                 }
@@ -233,7 +235,8 @@ export class Yard {
                         depth: d,
                         height: h,
                         stackId: this.stackRecordId,
-                        rowId: this.rowRecordId
+                        rowId: this.rowRecordId,
+                        isWheeled: this.isWheeled
                     }
                     depthArrar.push(unit)
                 }
@@ -261,7 +264,8 @@ export class Yard {
                     height: 0,
                     stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
                     rowId: this.rowRecordId,
-                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number,
+                    isWheeled: this.isWheeled
                 }
                 depthArrar.push(unit);
             } else if (WorkInstruction) {
@@ -272,7 +276,8 @@ export class Yard {
                     height: 0,
                     stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
                     rowId: this.rowRecordId,
-                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number,
+                    isWheeled: this.isWheeled
                 }
                 depthArrar.push(unit);
             }
@@ -284,7 +289,8 @@ export class Yard {
                     height: 0,
                     stackId: this.yardLayout.Rows[this.rowPosition].Stacks[d].RecordId,
                     rowId: this.rowRecordId,
-                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number
+                    stackNumber: this.yardLayout.Rows[this.rowPosition].Stacks[d].Number,
+                    isWheeled: this.isWheeled
                 }
                 depthArrar.push(unit)
             }
@@ -356,5 +362,6 @@ export interface unit {
     height: number,
     stackId: number,
     rowId: number,
-    stackNumber?: string
+    stackNumber?: string,
+    isWheeled?: boolean
 }

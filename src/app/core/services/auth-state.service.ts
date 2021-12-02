@@ -5,7 +5,6 @@ import { Token } from '../models/token.model';
 import { AuthService } from './auth.service';
 import { User, UserAccessLocation } from '../models/user.model';
 import { ColorRulesService } from './color-rules.service';
-import { Location } from 'src/app/feature/stack/shared/models/units.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LocationSelectDialogComponent } from '../components/location-select-dialog/location-select-dialog.component';
 
@@ -74,6 +73,7 @@ export class AuthStateService {
     this.isSessionActive$.next(false);
     this.userInfo$.next(null);
     this.colorRules.resetColorRuleSelected();
+    window.location.assign('/');
   }
 
 }

@@ -33,7 +33,6 @@ export class MenuComponent implements OnInit {
 
   async signOut() {
     await this.auth.singOut();
-    this.router.navigateByUrl('');
   }
 
   close() {

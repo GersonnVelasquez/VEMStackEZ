@@ -131,7 +131,16 @@ export class StackComponent implements OnInit {
       if (data) {
         this.auth.locationActive$.subscribe(async (location) => {
           if (location) {
-            this.yardLayout = await this.stackServices.getYardLayout(location.LocationId);
+
+            let res = await this.stackServices.getYardLayout(location.LocationId);
+            if (res) {
+              this.yardLayout = res;
+            } else {
+              alert('No yardLayout available');
+              await this.auth.singOut();
+              return;
+            }
+
             this.colorsRules = await this.colorRulesServices.getColorRulesData();
             this.colorRuleSelected = await this.colorRulesServices.getColorRulesSelected() ? (await this.colorRulesServices.getColorRulesSelected()) : this.colorsRules[0];
             this.yard = new Yard(this.yardLayout, this.getUnits);
@@ -184,18 +193,6 @@ export class StackComponent implements OnInit {
     }
   }
 
-
-
-  // async selectUnit(unit: unit) {
-  //   if (unit) {
-  //     if (!this.watingForSelectLocation) {
-  //       await this.selectUnitIfNoWatingForSelectLocation(unit);
-  //     } else {
-  //       this.selectUnitIfWatingForSelectLocation(unit);
-  //     }
-  //   }
-
-  // }
 
   async selectUnit(unit: unit) {
     if (!this.unitSelected && unit.type === 'Unit') {
@@ -324,7 +321,7 @@ export class StackComponent implements OnInit {
     const dialogRef = this.dialog.open(LostUnitDialogComponent);
     dialogRef.afterClosed().subscribe(async (result: any) => {
       if (result === 'YES') {
-        await this.stackServices.notifyLostUnit(this.unitSelected?.unit.RecordId, 3) //cambiar yard quemado
+        await this.stackServices.notifyLostUnit(this.unitSelected?.unit.RecordId, this.auth.locationActive$.getValue()!.LocationId) //cambiar yard quemado
         this.yardStorageService.updateData$.next({ origen: this.instancia, data: 'Reset' });
       }
     });
@@ -339,7 +336,7 @@ export class StackComponent implements OnInit {
         await this.yard.setManualStackByRecordId(result.StackRecordId);
         let unitSearched: unit = {
           depth: result.Depth,
-          height: result.Height - 1,
+          height: this.yard.isWheeled ? 0 : result.Height - 1,
           rowId: result.RowRecordId,
           stackId: result.StackRecordId,
           type: 'Unit',

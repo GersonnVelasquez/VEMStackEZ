@@ -12,6 +12,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListViewComponent } from './components/list-view/list-view.component';
 import { ListViewFilterDialogComponent } from './components/list-view-filter-dialog/list-view-filter-dialog.component';
+import { InstructionOutboudModalComponent } from './components/instruction-outboud-modal/instruction-outboud-modal.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ListViewFilterDialogComponent } from './components/list-view-filter-dia
     IntructionsComponent,
     IntructionDialogComponent,
     ListViewComponent,
-    ListViewFilterDialogComponent
+    ListViewFilterDialogComponent,
+    InstructionOutboudModalComponent
   ],
   imports: [
     CommonModule,

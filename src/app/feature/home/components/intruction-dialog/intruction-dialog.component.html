@@ -8,13 +8,13 @@
 
     <div class="button-area">
         <button [disabled]="instruction?.cantCompleteTospecifiedYardLocation" mat-button (click)="close('Complete')">
-            I completed the move to the specified yard location
+            <span *ngIf="instruction.MovementType !== 1">I completed the move to the specified yard location</span>
+            <span *ngIf="instruction.MovementType === 1">I delivered the specified unit</span>
         </button>
         <button mat-button (click)="close('Move')">
-            I completed the move to a different yard location
+            <span *ngIf="instruction.MovementType !== 1">I completed the move to a different yard location</span>
+            <span *ngIf="instruction.MovementType === 1">I delivered a different unit</span>
         </button>
     </div>
-
-
 
 </div>

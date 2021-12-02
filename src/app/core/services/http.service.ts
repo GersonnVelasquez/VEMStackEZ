@@ -9,12 +9,15 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  doGet(url: string) {
+  doGet(url: string, validarError: boolean = true) {
     return this.http.get<Response>(url).pipe(
       map(res => {
         let newRes = new Response(res);
-        if (newRes.isError) {
+        if (newRes.isError && validarError) {
           throw new Error(newRes.Details)
+        };
+        if (newRes.isError && !validarError) {
+          return null;
         };
         return newRes.getJsonData;
       })

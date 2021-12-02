@@ -10,6 +10,7 @@ import { YardStorageService } from 'src/app/core/storage/yard-storage.service';
 import { UnitAllocationPayload } from '../../shared/models/unit-allocation-payload.model';
 import { ViewDidLeave } from '@ionic/angular';
 import { NavigationEnd, Router } from '@angular/router';
+import { InstructionOutboudModalComponent } from '../instruction-outboud-modal/instruction-outboud-modal.component';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class IntructionsComponent implements OnInit, OnDestroy {
   @Input() instancia: string;
 
 
-  constructor(private router: Router,private instructionsServerices: InstructionsService, private auth: AuthStateService, public dialog: MatDialog, private yardStorageService: YardStorageService) { }
+  constructor(private router: Router, private instructionsServerices: InstructionsService, private auth: AuthStateService, public dialog: MatDialog, private yardStorageService: YardStorageService) { }
 
   ngOnInit(): void {
     this.yardStorageService.isntructionMode$.subscribe(mode => {
@@ -58,15 +59,30 @@ export class IntructionsComponent implements OnInit, OnDestroy {
 
     this.yardStorageService.unitSelectedForSelectLocation$.subscribe(async (unit) => {
       if (unit.data) {
-        this.completeWorkInstructionToDiferentLocation(unit.data, unit.data.type);
+        if (this.instructionSelected.MovementType === 1 &&  unit.data.type === 'Unit') {
+          const dialogRef = this.dialog.open(InstructionOutboudModalComponent, {
+            data: unit.data
+          });
+  
+          dialogRef.afterClosed().subscribe(async (yesAction) => {
+            if (yesAction) {
+              this.completeWorkInstructionToDiferentLocation(unit.data, unit.data.type);
+            }
+          });
+          
+        } else if(this.instructionSelected.MovementType !== 1) {
+          this.completeWorkInstructionToDiferentLocation(unit.data, unit.data.type);
+        }
+
       }
     });
 
-    this.getInstructions();
+
     this.createGetInstructionsInterval();
-    this.auth.userInfo$.subscribe(user => {
-      if (user) {
-        this.instructionsServerices.getInstructions(user.Location.LocationId).subscribe(data => {
+
+    this.auth.locationActive$.subscribe(location => {
+      if (location) {
+        this.instructionsServerices.getInstructions(location.LocationId).subscribe(data => {
           this.instructions = data;
         });
       }
@@ -75,22 +91,20 @@ export class IntructionsComponent implements OnInit, OnDestroy {
     this.router.events.subscribe(
       event => {
         clearInterval(this.getInstructionsInterval);
-        if( event instanceof NavigationEnd ){
-          if(event.url === '/'){
+        if (event instanceof NavigationEnd) {
+          if (event.url === '/') {
             console.log(event);
-          }       
+          }
         }
       });
   }
 
   getInstructions() {
-    if (this.auth.userInfo) {
-      this.instructionsServerices.getInstructions(this.auth.userInfo.Location.LocationId).subscribe(data => {
-        this.instructions = data;
-      });
-    }
+    this.instructionsServerices.getInstructions(this.auth.locationActive$.getValue()!.LocationId).toPromise().then(data => {
+      this.instructions = data;
+    });
   }
-  
+
   ngOnDestroy() {
     clearInterval(this.getInstructionsInterval);
   }
@@ -131,11 +145,21 @@ export class IntructionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async completeWorkInstructionToDiferentLocation(unit: unit, type: 'Null' | 'Instruction') {
+  async completeWorkInstructionToDiferentLocation(unit: unit, type: 'Null' | 'Instruction' | 'Unit') {
     this.instructionSelected.Depth = unit.depth;
-    this.instructionSelected.Height = unit.height - 1;
+
+    if (unit.isWheeled) {
+      this.instructionSelected.Height = unit.height;
+    } else {
+      this.instructionSelected.Height = unit.height - 1;
+    }
+
     this.instructionSelected.RowRecordId = unit.rowId;
     this.instructionSelected.StackRecordId = unit.stackId;
+
+    if (type === 'Unit') {
+      this.instructionSelected.UnitNumber = unit.unit.unitNumber;
+    }
 
     if (type === 'Instruction') {
       await this.recalculateWorkInstruction(unit);

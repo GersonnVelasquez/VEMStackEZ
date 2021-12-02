@@ -15,16 +15,17 @@ export class StackService {
   // /getActiveYardLayout  ?id=LocationId
 
   getYardLayout(RecordId: number) {
-    return this.http.doGet(environment.svrBackEnd + 'api/YardLayouts?id=' + RecordId).pipe(
+    return this.http.doGet(environment.svrBackEnd + 'api/YardLayouts?id=' + RecordId, false).pipe(
       map(item => {
-        let res: YardLayout = item
+        let res: YardLayout | null = item
         return res;
       })
     ).toPromise();
   }
 
-  getUnits(row: string, yardId: number, colorGroupId:number) {
-    return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/v2/GetInventory?row=${row}&YardId=${yardId}&colorCodeGroupId=${colorGroupId}`).pipe(
+  getUnits(row: string, yardId: number, colorGroupId: number) {
+    let colorGroup = colorGroupId ? `&colorCodeGroupId=${colorGroupId}` : '';
+    return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/v2/GetInventory?row=${row}&YardId=${yardId}${colorGroup}`).pipe(
       map(item => {
         let res: Units = item
         return res;
