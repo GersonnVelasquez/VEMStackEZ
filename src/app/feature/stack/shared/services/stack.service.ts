@@ -24,7 +24,7 @@ export class StackService {
   }
 
   getUnits(row: string, yardId: number, colorGroupId: number) {
-    let colorGroup = colorGroupId ? `&colorCodeGroupId=${colorGroupId}` : '';
+    let colorGroup = colorGroupId ? `&colorCodeGroupId=${colorGroupId}` : '&colorCodeGroupId=-1';
     return this.http.doGet(environment.svrBackEnd + `api/ClerkStackEZ/v2/GetInventory?row=${row}&YardId=${yardId}${colorGroup}`).pipe(
       map(item => {
         let res: Units = item
