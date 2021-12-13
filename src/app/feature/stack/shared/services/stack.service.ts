@@ -15,7 +15,8 @@ export class StackService {
   // /getActiveYardLayout  ?id=LocationId
 
   getYardLayout(RecordId: number) {
-    return this.http.doGet(environment.svrBackEnd + 'api/YardLayouts?id=' + RecordId, false).pipe(
+    console.log(RecordId);
+    return this.http.doGet(environment.svrBackEnd + 'api/YardLayouts/getactiveYardLayout?id=' + RecordId, false).pipe(
       map(item => {
         let res: YardLayout | null = item
         return res;
