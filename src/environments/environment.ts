@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  svrBackEnd: 'https://apidev.vemsoftware.com/'
+  svrBackEnd: 'https://api.vemsoftware.com/'
 };
 
 /*

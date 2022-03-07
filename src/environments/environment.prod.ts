@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  svrBackEnd: 'https://apidev.vemsoftware.com/'
+  svrBackEnd: 'https://api.vemsoftware.com/'
 };
